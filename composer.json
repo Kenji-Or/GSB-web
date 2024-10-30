@@ -1,0 +1,12 @@
+{
+    "name": "kenji/mon-projet-web",
+    "require": {
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
+

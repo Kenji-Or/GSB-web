@@ -1,0 +1,17 @@
+# public/.htaccess
+
+RewriteEngine On
+
+# Rediriger toutes les requêtes sauf pour les fichiers et dossiers existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rediriger vers index.php
+RewriteRule ^ index.php [QSA,L]
+
+# Ajouter des en-têtes de sécurité pour renforcer la sécurité
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
