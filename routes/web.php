@@ -12,7 +12,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : "";
 switch ($action) {
     // Afficher le formulaire de connexion (GET)
     case 'login':
-        include '../app/Views/pageDeConnexion.php';
+        include '../app/Views/pages/pageDeConnexion.php';
         break;
 
     // Gérer la connexion (POST)
@@ -33,7 +33,20 @@ switch ($action) {
     // Page d'accueil (GET) avec vérification de la session
     case 'home':
         if (isset($_SESSION['nom'])) {
-            include '../app/Views/Home.php';
+            include '../app/Views/pages/Home.php';
+        } else {
+            header('Location: index.php?action=login');
+            exit();
+        }
+        break;
+
+    case 'GestionAcces':
+        if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") {
+            include '../app/Views/pages/GestionUsers.php';
+        } elseif (isset($_SESSION['role']) && $_SESSION['role'] != "admin") {
+            http_response_code(404);
+            echo "Vous n'avez pas les autorités suffisante";
+            break;
         } else {
             header('Location: index.php?action=login');
             exit();

@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSB</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .bg-navbar {
+            background-color: #7298C8;
+        }
+    </style>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+<body class="d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-lg navbar-dark bg-navbar mb-4 sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php?action=home"><img src="assets/images/logoGSB.svg" alt="logo" width="100"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +49,6 @@
                         <button type="submit" class="nav-link text-white">Se déconnecter</button>
                     </form>
                 </li>
-                <!-- Ajoutez d'autres liens ici selon les besoins -->
             </ul>
         </div>
     </div>
