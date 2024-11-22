@@ -7,8 +7,6 @@ class AuthController
 {
     public function login()
     {
-        //session_start();
-
         // Vérifier que la méthode de la requête est POST
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -22,7 +20,7 @@ class AuthController
                 // Stocker les informations de l'utilisateur dans la session
                 $_SESSION['nom'] = $user['nom'];
                 $_SESSION['prenom'] = $user['prenom'];
-                $_SESSION['role'] = $user['role'];
+                $_SESSION['role'] = $user['role_id'];
                 $_SESSION['logged_in'] = true;
 
                 session_regenerate_id();

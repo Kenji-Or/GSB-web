@@ -1,6 +1,4 @@
 <?php
-// public/index.php
-
 // Définir la constante du chemin de base du projet
 define('BASE_PATH', dirname(__DIR__) . '/');
 

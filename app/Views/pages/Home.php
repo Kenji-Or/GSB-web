@@ -2,17 +2,10 @@
 // Inclusion du header
 include(BASE_PATH . '/app/Views/layouts/header.php');
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['nom'])) {
-    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: index.php?action=login");
-    exit;
-}
-
 // Échapper les données de la session pour éviter les attaques XSS
 $nom = htmlspecialchars($_SESSION['nom'], ENT_QUOTES, 'UTF-8');
 $prenom = htmlspecialchars($_SESSION['prenom'], ENT_QUOTES, 'UTF-8');
-$role = htmlspecialchars($_SESSION['role'], ENT_QUOTES, 'UTF-8');
+$role = $_SESSION['role'];
 ?>
 
 <div class="container my-4 flex-grow-1">

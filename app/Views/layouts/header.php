@@ -1,3 +1,10 @@
+<?php // Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['nom'])) {
+    // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+    header("Location: index.php?action=login");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -30,7 +37,7 @@
                     <a class="nav-link text-white" href="index.php?action=forum">Forum</a>
                 </li>
                 <?php
-                if(($_SESSION["role"] === "admin")){
+                if(($_SESSION["role"] === 1)){
                     ?>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="index.php?action=GestionAcces">Gestion des accès</a>

@@ -1,0 +1,8 @@
+# Ignorer le dossier vendor
+/vendor/
+
+# Ignorer le fichier de variables d'environnement
+.env
+
+# Ignorer les fichiers générés par des IDE
+.idea/

@@ -1,7 +1,9 @@
 {
     "name": "kenji/mon-projet-web",
     "require": {
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "phpmailer/phpmailer": "^6.9",
+        "vlucas/phpdotenv": "^5.6"
     },
     "autoload": {
         "psr-4": {
@@ -9,4 +11,3 @@
         }
     }
 }
-
