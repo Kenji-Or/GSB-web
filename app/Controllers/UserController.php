@@ -20,6 +20,11 @@ class UserController
         require_once __DIR__ . '/../Views/pages/GestionAcces.php';
     }
 
+    public function editUser($id)
+    {
+        return User::findById($id);
+    }
+
     public function addingUser() {
 
         // Générer un mot de passe aléatoire
@@ -81,5 +86,22 @@ class UserController
         }
         header("Location: index.php?action=GestionAcces");
         exit();
+    }
+
+    public function updateUser($user_id)
+    {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            $prenom = filter_input(INPUT_POST, 'prenom');
+            $nom = filter_input(INPUT_POST, 'nom');
+            $role_id = filter_input(INPUT_POST, 'role_id');
+
+            User::updateUser($user_id, $email, $prenom, $nom, $role_id);
+        }
+    }
+
+    public function deleteUser($user_id)
+    {
+        User::deletingUser($user_id);
     }
 }

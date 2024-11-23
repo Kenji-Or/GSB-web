@@ -32,8 +32,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
                 <td><?= htmlspecialchars($user['email']) ?></td>
                 <td><?= htmlspecialchars($user['role']) ?></td>
                 <td>
-                    <button class="btn btn-primary btn-sm me-1">Modifier</button>
-                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                    <a href="index.php?action=edit/<?= $user['user_id'] ?>"><button class="btn btn-primary btn-sm me-1">Modifier</button></a>
+                    <a href="index.php?action=delete/<?= $user['user_id'] ?>"><button class="btn btn-danger btn-sm">Supprimer</button></a>
                 </td>
             </tr>
         <?php endforeach; ?>

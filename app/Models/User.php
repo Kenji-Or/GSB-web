@@ -26,6 +26,17 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function findById($user_id)
+    {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE user_id = :user_id");
+        $stmt->bindValue(":user_id", $user_id);
+        $stmt->execute();
+
+        $db= null;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public static function getAllUsers()
     {
         $db = self::getDBConnection();
@@ -49,6 +60,30 @@ class User
         $query->bindParam(':password_hash', $password_hash);
         $query->execute();
 
+        $db= null;
+    }
+
+    public static function updateUser($user_id, $email, $prenom, $nom, $role_id)
+    {
+        $db = self::getDBConnection();
+        $query = $db->prepare("UPDATE Users SET email = :email, prenom = :prenom, nom = :nom, role_id = :role_id WHERE user_id = :user_id");
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+        $query->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $query->bindParam(':role_id', $role_id, PDO::PARAM_INT);
+        $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+
+        $query->execute();
+
+        $db= null;
+    }
+
+    public static function deletingUser($user_id)
+    {
+        $db = self::getDBConnection();
+        $query = $db->prepare("DELETE FROM Users WHERE user_id = :user_id");
+        $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $query->execute();
         $db= null;
     }
 }

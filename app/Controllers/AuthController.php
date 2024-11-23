@@ -21,6 +21,7 @@ class AuthController
                 $_SESSION['nom'] = $user['nom'];
                 $_SESSION['prenom'] = $user['prenom'];
                 $_SESSION['role'] = $user['role_id'];
+                $_SESSION['user_id'] = $user['user_id'];
                 $_SESSION['logged_in'] = true;
 
                 session_regenerate_id();
