@@ -16,7 +16,7 @@ if (isset($user)) {
             </div>
             <div class="card mt-4 shadow-sm">
                 <div class="card-body">
-                    <form action="index.php?action=updateUser/<?= $user['user_id'] ?>" method="POST">
+                    <form id="updateUserForm" action="index.php?action=updateUser/<?= $user['user_id'] ?>" method="POST">
                         <!-- Email -->
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
@@ -50,6 +50,19 @@ if (isset($user)) {
                                 </select>
                             <?php } ?>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmpassword" class="form-label">Confirmer le mot de passe</label>
+                            <input type="password" class="form-control" id="confirmpassword" name="confirmpassword">
+                        </div>
+
+                        <div id="error-message" class="text-danger mb-3" style="display: none;">Les mots de passe ne correspondent pas.</div>
+
                         <!-- Boutons -->
                         <div class="d-flex justify-content-around mt-5">
                             <button type="submit" class="btn btn-success">Enregistrer</button>
@@ -63,6 +76,22 @@ if (isset($user)) {
                 </div>
             </div>
         </div>
+        <script>
+            // Vérification des mots de passe
+            document.getElementById('updateUserForm').addEventListener('submit', function(event) {
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmpassword').value;
+                const errorMessage = document.getElementById('error-message');
+
+                if (password && password !== confirmPassword) {
+                    event.preventDefault(); // Bloque l'envoi du formulaire
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = 'Les mots de passe ne correspondent pas.';
+                } else {
+                    errorMessage.style.display = 'none'; // Cache le message d'erreur si tout est correct
+                }
+            });
+        </script>
 <?php
     } else {
         ?>

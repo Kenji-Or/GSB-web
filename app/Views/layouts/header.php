@@ -12,6 +12,7 @@ if (!isset($_SESSION['nom'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GSB</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .bg-navbar {
             background-color: #7298C8;
@@ -51,10 +52,16 @@ if (!isset($_SESSION['nom'])) {
                 <li class="nav-item">
                     <a class="nav-link text-white" href="index.php?action=contact">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <form action="index.php?action=logout" method="POST" style="display: inline;">
-                        <button type="submit" class="nav-link text-white">Se déconnecter</button>
-                    </form>
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle text-white" id="deroulanta" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Profile
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="deroulanta">
+                        <a class="dropdown-item" href="index.php?action=profile/<?php echo $_SESSION['user_id']; ?>">Mon Profile</a>
+                        <form action="index.php?action=logout" method="POST" style="display: inline;">
+                            <button type="submit" class="dropdown-item">Se déconnecter</button>
+                        </form>
+                    </div>
                 </li>
             </ul>
         </div>

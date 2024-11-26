@@ -63,15 +63,18 @@ class User
         $db= null;
     }
 
-    public static function updateUser($user_id, $email, $prenom, $nom, $role_id)
+    public static function updateUser($user_id, $email, $prenom, $nom, $role_id, $password_hash)
     {
         $db = self::getDBConnection();
-        $query = $db->prepare("UPDATE Users SET email = :email, prenom = :prenom, nom = :nom, role_id = :role_id WHERE user_id = :user_id");
+        $query = $db->prepare("UPDATE Users SET email = :email, prenom = :prenom, nom = :nom, role_id = :role_id, password_hash = :password_hash WHERE user_id = :user_id");
         $query->bindParam(':email', $email, PDO::PARAM_STR);
         $query->bindParam(':prenom', $prenom, PDO::PARAM_STR);
         $query->bindParam(':nom', $nom, PDO::PARAM_STR);
         $query->bindParam(':role_id', $role_id, PDO::PARAM_INT);
         $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        if ($password_hash !== null) {
+            $query->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
+        }
 
         $query->execute();
 

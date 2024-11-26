@@ -75,6 +75,7 @@ class UserController
                     <li><strong>Mot de passe :</strong> $motDePasse</li>
                 </ul>
                 <p>Veuillez vous connecter et modifier votre mot de passe dès que possible.</p>
+                <p><a href='http://gsb.local/index.php?action=login'>Accédez à votre compte</a></p>
                 <p>Cordialement,</p>
                 <p>L'équipe de support GSB</p>";
 
@@ -95,8 +96,20 @@ class UserController
             $prenom = filter_input(INPUT_POST, 'prenom');
             $nom = filter_input(INPUT_POST, 'nom');
             $role_id = filter_input(INPUT_POST, 'role_id');
+            // Vérifier si un nouveau mot de passe est fourni
+            $password = filter_input(INPUT_POST, 'password');
+            $passwordconfirm = filter_input(INPUT_POST, 'confirmpassword');
+            if ($password !== $passwordconfirm) {
+                die("Les mots de passe ne correspondent pas.");
+            }
+            $password_hash = null;
 
-            User::updateUser($user_id, $email, $prenom, $nom, $role_id);
+            if (!empty($password)) {
+                // Hacher le mot de passe uniquement s'il est fourni
+                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            }
+
+            User::updateUser($user_id, $email, $prenom, $nom, $role_id, $password_hash);
         }
     }
 

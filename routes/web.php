@@ -22,8 +22,13 @@ $routes = [
         $userId = $matches[1];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userController->updateUser($userId);
-            header('Location: index.php?action=home');
-            exit();
+            if ($_SESSION['role'] === 'admin') {
+                header('Location: index.php?action=GestionAcces');
+                exit();
+            } else {
+                header('Location: index.php?action=home');
+                exit();
+            }
         } else {
             http_response_code(405);
             echo "Méthode non autorisée.";
@@ -34,6 +39,13 @@ $routes = [
          $userController->deleteUser($userId);
          header('Location: index.php?action=home');
          exit();
+    },
+    '/^profile\/(\d+)$/' => function($matches) use ($userController, $roleController) {
+        $userId = $matches[1];
+        $user = $userController->editUser($userId);
+        $roles = $roleController->listRoles();
+        include '../app/Views/pages/profile.php';
+        exit();
     },
 ];
 
