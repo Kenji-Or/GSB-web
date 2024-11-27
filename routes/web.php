@@ -2,10 +2,12 @@
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\RoleController;
+use App\Controllers\DocumentController;
 
 $authController = new AuthController();
 $userController = new UserController();
 $roleController = new RoleController();
+$documentController = new DocumentController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = isset($_GET['action']) ? $_GET['action'] : "";
@@ -47,6 +49,12 @@ $routes = [
         include '../app/Views/pages/profile.php';
         exit();
     },
+    '/^document\/(\d+)$/' => function($matches) use ($documentController) {
+        $documentId = $matches[1];
+        $document = $documentController->getDocument($documentId);
+        include '../app/Views/pages/document.php';
+        exit();
+    }
 ];
 
 $routeMatched = false;
@@ -115,6 +123,26 @@ if (!$routeMatched) {
             } else {
                 http_response_code(405);
                 echo "Méthode non autorisée.";
+            }
+            break;
+
+        case 'documents':
+            if ($connected) {
+                $documents = $documentController->getAllDocuments();
+                include '../app/Views/pages/listDocuments.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'searchdocument':
+            if ($connected) {
+                $document = $documentController->searchDocumentByTitle();
+                include '../app/Views/pages/document.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
             }
             break;
 

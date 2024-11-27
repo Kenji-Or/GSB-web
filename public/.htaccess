@@ -2,9 +2,13 @@
 
 RewriteEngine On
 
-# Rediriger toutes les requêtes sauf pour les fichiers et dossiers existants
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# Si le fichier ou dossier existe, laisse le serveur le gérer
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Sinon, redirige vers le routeur PHP
+RewriteRule ^ index.php [L]
 
 # Rediriger vers index.php
 RewriteRule ^ index.php [QSA,L]
@@ -15,3 +19,6 @@ RewriteRule ^ index.php [QSA,L]
     Header set X-Frame-Options "DENY"
     Header set X-XSS-Protection "1; mode=block"
 </IfModule>
+
+AddType application/pdf .pdf
+
