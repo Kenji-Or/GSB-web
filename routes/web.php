@@ -10,7 +10,7 @@ $roleController = new RoleController();
 $documentController = new DocumentController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
-$action = isset($_GET['action']) ? $_GET['action'] : "";
+$action = $_GET['action'] ?? "";
 $connected = isset($_SESSION['nom']) ? true : false;
 
 $routes = [
@@ -54,16 +54,24 @@ $routes = [
         $document = $documentController->getDocument($documentId);
         include '../app/Views/pages/document.php';
         exit();
+    },
+    '/^deleteDocument\/(\d+)$/' => function($matches) use ($documentController) {
+    $documentId = $matches[1];
+    $documentController->deleteDocument($documentId);
+    header('Location: index.php?action=documents');
+    exit();
     }
 ];
 
 $routeMatched = false;
 
 foreach ($routes as $pattern => $callback) {
-    if (preg_match($pattern, $action, $matches)) {
-        $routeMatched = true;
-        $callback($matches); // Appelle la fonction associée à la route
-        break;
+    if ($connected) {
+        if (preg_match($pattern, $action, $matches)) {
+            $routeMatched = true;
+            $callback($matches); // Appelle la fonction associée à la route
+            break;
+        }
     }
 }
 if (!$routeMatched) {
@@ -118,7 +126,7 @@ if (!$routeMatched) {
             break;
 
         case 'creatinguser':
-            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['role'] === 1) {
                 $userController->addingUser();
             } else {
                 http_response_code(405);
@@ -138,18 +146,48 @@ if (!$routeMatched) {
 
         case 'searchdocument':
             if ($connected) {
-                $document = $documentController->searchDocumentByTitle();
-                include '../app/Views/pages/document.php';
+                $documents = $documentController->searchDocumentByTitle();
+                include '../app/Views/pages/listDocuments.php';
             } else {
                 header('Location: index.php?action=login');
                 exit();
             }
             break;
 
+        case 'createdocument':
+            if ($connected) {
+                include '../app/Views/pages/CreateDocument.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'creatingdocument':
+            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $documentController->createDocument();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case "view_file":
+            $file = $_GET['file'] ?? "";
+            $filePath = "uploads/PDF/$file";
+            if (file_exists($filePath)) {
+                header("Content-Type: application/pdf");
+                readfile($filePath);
+                exit();
+            } else {
+                echo "Fichier non trouvé.";
+            }
+            break;
+
         // Route par défaut pour les pages non trouvées
         default:
             http_response_code(404);
-            echo "Page non trouvée.";
+            include('../app/Views/pages/404.php');
             break;
     }
 }

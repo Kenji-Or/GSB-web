@@ -9,6 +9,18 @@ if (isset($document) && $document['document_pdf']):
         <h1 class="display-4"><?= htmlspecialchars($document['nom_document'])?></h1>
     </div>
 
+    <!-- Affichage du message d'erreur -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger mt-2">
+            <?php
+            // Utilisation de htmlspecialchars pour éviter les attaques XSS
+            echo htmlspecialchars($_SESSION['error']);
+            // Supprimer le message d'erreur après l'affichage
+            unset($_SESSION['error']);
+            ?>
+        </div>
+    <?php endif; ?>
+
     <iframe src="<?= $pdfPath ?>" width="100%" height="600px"> </iframe>
 
     <!-- Section auteur et date -->
@@ -23,6 +35,12 @@ if (isset($document) && $document['document_pdf']):
         </p>
     </div>
 
+    <?php if ($_SESSION['role'] === 1) {
+        ?>
+    <div class="mt-3 text-center">
+        <a href="index.php?action=deleteDocument/<?= $document['id_document'] ?>"><button class="btn btn-danger">Supprimer</button></a>
+    </div>
+    <?php } ?>
 </div>
 
 <?php
@@ -30,5 +48,5 @@ else: ?>
     <p class="text-center">Document introuvable.</p>
 <?php endif;
 
-include(BASE_PATH . '/app/Views/layouts/footer.html');
+include(BASE_PATH . '/app/Views/layouts/footer.php');
 ?>

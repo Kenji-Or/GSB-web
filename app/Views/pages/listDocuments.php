@@ -7,6 +7,18 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
         <h1 class="display-4">Documents</h1>
     </div>
 
+    <!-- Affichage du message d'erreur -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger mt-2">
+            <?php
+            // Utilisation de htmlspecialchars pour éviter les attaques XSS
+            echo htmlspecialchars($_SESSION['error']);
+            // Supprimer le message d'erreur après l'affichage
+            unset($_SESSION['error']);
+            ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Formulaire de recherche -->
     <form action="index.php?action=searchdocument" method="post" class="d-flex justify-content-center mb-4">
         <div class="input-group w-50">
@@ -14,22 +26,24 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
                 type="text"
                 class="form-control"
                 placeholder="Entrer le titre du document recherché"
-                name="search"
-                required>
+                name="search">
             <button type="submit" name="submit" class="btn btn-primary input-group-append">
                 <i class="bi bi-search"></i> Rechercher
             </button>
         </div>
     </form>
 
-    <!-- Bouton Ajouter Utilisateur -->
-    <div class="d-flex justify-content-end mb-3">
-        <a href="index.php?action=createdocument">
-            <button class="btn btn-success">
-                Ajouter un document
-            </button>
-        </a>
-    </div>
+    <?php if ($_SESSION['role'] === 1) {
+        ?>
+        <!-- Bouton Ajouter Utilisateur -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="index.php?action=createdocument">
+                <button class="btn btn-success">
+                    Ajouter un document
+                </button>
+            </a>
+        </div>
+    <?php } ?>
     <div class="card mt-4 shadow-sm">
         <div class="card-body">
             <?php if (isset($documents) && count($documents) > 0): ?>
@@ -47,7 +61,7 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
                 <tr>
                     <td><?= htmlspecialchars($document['nom_document'])?></td>
                     <td><?= htmlspecialchars($document['auteur'])?></td>
-                    <td><?= htmlspecialchars($document['date_creation'])?></td>
+                    <td><?= htmlspecialchars(date("d/m/Y", strtotime($document['date_creation']))) ?></td>
                     <td><a href="index.php?action=document/<?= $document['id_document'] ?>"><button class="btn btn-primary btn-sm me-1">Détail</button></a></td>
                 </tr>
                 <?php endforeach; ?>
@@ -59,7 +73,6 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
         </div>
     </div>
 </div>
-
 <?php
-include(BASE_PATH . '/app/Views/layouts/footer.html');
+include(BASE_PATH . '/app/Views/layouts/footer.php');
 ?>

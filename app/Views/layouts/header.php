@@ -69,3 +69,32 @@ if (!isset($_SESSION['nom'])) {
         </div>
     </div>
 </nav>
+<?php if (isset($_SESSION['success'])): ?>
+    <div id="success-alert" class="alert alert-success mb-3">
+        <?php
+        // Utilisation de htmlspecialchars pour éviter les attaques XSS
+        echo htmlspecialchars($_SESSION['success']);
+        unset($_SESSION['success']);
+        ?>
+    </div>
+<?php endif; ?>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Trouver l'alerte par son ID
+        var successAlert = document.getElementById("success-alert");
+
+        // Si l'alerte existe, configurer un délai pour la suppression
+        if (successAlert) {
+            setTimeout(function() {
+                // Appliquer une transition de disparition
+                successAlert.style.transition = "opacity 0.5s";
+                successAlert.style.opacity = "0";
+
+                // Supprimer l'élément après la transition
+                setTimeout(function() {
+                    successAlert.remove();
+                }, 500); // Correspond à la durée de la transition
+            }, 10000); // Délai de 10 secondes
+        }
+    });
+</script>

@@ -42,10 +42,16 @@ class UserController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $motDePasse = genererMotDePasse();
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-            $prenom = filter_input(INPUT_POST, 'prenom');
-            $nom = filter_input(INPUT_POST, 'nom');
-            $role_id = filter_input(INPUT_POST, 'role_id');
+            $prenom = htmlspecialchars(trim($_POST['prenom'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $nom = htmlspecialchars(trim($_POST['nom'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $role_id = filter_input(INPUT_POST, 'role_id', FILTER_SANITIZE_NUMBER_INT);
             $password_hash = password_hash($motDePasse, PASSWORD_DEFAULT);
+
+            if (empty($email) || empty($prenom) || empty($nom) || empty($role_id)) {
+                $_SESSION['error'] = "Il y a un des éléments vide ou  non correcte.";
+                header("Location: index.php?action=createUser");
+                exit;
+            }
 
 
             User::addUser($email, $prenom, $nom, $role_id, $password_hash);
@@ -81,8 +87,11 @@ class UserController
 
                 // Envoyer l'e-mail
                 $mail->send();
+                $_SESSION['success'] = "Utilisateur ajouté avec succès.";
             } catch (Exception $e) {
-                echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
+                //echo "Erreur lors de l'envoi de l'e-mail : {$mail->ErrorInfo}";
+                $_SESSION['error'] = "Erreur lors de l'envoi de l'e-mail, contacter un support";
+                exit();
             }
         }
         header("Location: index.php?action=GestionAcces");
@@ -92,29 +101,56 @@ class UserController
     public function updateUser($user_id)
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Récupérer les données utilisateur
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-            $prenom = filter_input(INPUT_POST, 'prenom');
-            $nom = filter_input(INPUT_POST, 'nom');
-            $role_id = filter_input(INPUT_POST, 'role_id');
-            // Vérifier si un nouveau mot de passe est fourni
-            $password = filter_input(INPUT_POST, 'password');
-            $passwordconfirm = filter_input(INPUT_POST, 'confirmpassword');
-            if ($password !== $passwordconfirm) {
-                die("Les mots de passe ne correspondent pas.");
+            $prenom = htmlspecialchars(trim($_POST['prenom'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $nom = htmlspecialchars(trim($_POST['nom'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $role_id = filter_input(INPUT_POST, 'role_id', FILTER_SANITIZE_NUMBER_INT);
+            $password = htmlspecialchars(trim($_POST['password'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $passwordconfirm = htmlspecialchars(trim($_POST['confirmpassword'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+            // Vérifier la correspondance des mots de passe
+            if (!empty($password) && $password !== $passwordconfirm) {
+                $_SESSION['error'] = "Les mots de passe ne correspondent pas.";
+                header("Location: index.php?action=GestionAcces");
+                exit();
             }
-            $password_hash = null;
+
+            // Construire dynamiquement les champs à mettre à jour
+            $fields = [
+                "email = :email",
+                "prenom = :prenom",
+                "nom = :nom",
+                "role_id = :role_id",
+            ];
+
+            $params = [
+                ':email' => $email,
+                ':prenom' => $prenom,
+                ':nom' => $nom,
+                ':role_id' => $role_id,
+            ];
 
             if (!empty($password)) {
-                // Hacher le mot de passe uniquement s'il est fourni
                 $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                $fields[] = "password_hash = :password_hash";
+                $params[':password_hash'] = $password_hash;
             }
 
-            User::updateUser($user_id, $email, $prenom, $nom, $role_id, $password_hash);
+            // Appeler la méthode du modèle
+            User::updateUser($fields, $params, $user_id);
+
+            // Redirection après succès
+            $_SESSION['success'] = "Utilisateur mis à jour avec succès.";
+            header("Location: index.php?action=home");
+            exit();
         }
     }
+
 
     public function deleteUser($user_id)
     {
         User::deletingUser($user_id);
+        $_SESSION['success'] = "Utilisateur supprimé avec succès.";
     }
 }

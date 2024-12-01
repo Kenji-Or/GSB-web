@@ -37,18 +37,16 @@ if (isset($user)) {
 
                         <!-- Rôle -->
                         <div class="mb-3">
-                            <?php
-                            if (isset($roles)) {
-                                ?>
-                            <label for="role" class="form-label">Rôle</label>
-                                <select id="role" name="role_id" class="form-select" required>
+                            <?php if (isset($roles)): ?>
+                                <label for="role" class="form-label">Rôle</label>
+                                <select id="role" name="role_id" class="form-select" <?= ($user['role_id'] == 2 || $user['role_id'] == 3) && $_SESSION['role'] != 1 ? 'disabled' : '' ?> required>
                                     <?php foreach ($roles as $role): ?>
                                         <option value="<?= $role['id_role'] ?>" <?= $user['role_id'] == $role['id_role'] ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($role['role']) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
-                            <?php } ?>
+                            <?php endif; ?>
                         </div>
 
                         <div class="mb-3">
@@ -103,7 +101,7 @@ if (isset($user)) {
         </div>
         <?php
     }
-        include(BASE_PATH . '/app/Views/layouts/footer.html');
+        include(BASE_PATH . '/app/Views/layouts/footer.php');
 }
 ?>
 

@@ -2,6 +2,8 @@
 namespace App\Models;
 
 use PDO;
+use \PDOException;
+use \Exception;
 
 class User
 {
@@ -52,7 +54,7 @@ class User
     {
         // Préparer la requête SQL et lier les paramètres
         $db = self::getDBConnection();
-        $query = $db->prepare("INSERT INTO Users (prenom, nom, email, role_id, password_hash) VALUES (:prenom, :nom, :email, :role_id, :password_hash)");
+        $query = $db->prepare("INSERT INTO users (prenom, nom, email, role_id, password_hash) VALUES (:prenom, :nom, :email, :role_id, :password_hash)");
         $query->bindParam(':email', $email);
         $query->bindParam(':prenom', $prenom);
         $query->bindParam(':nom', $nom);
@@ -63,28 +65,37 @@ class User
         $db= null;
     }
 
-    public static function updateUser($user_id, $email, $prenom, $nom, $role_id, $password_hash)
+    public static function updateUser($fields, $params, $user_id)
     {
-        $db = self::getDBConnection();
-        $query = $db->prepare("UPDATE Users SET email = :email, prenom = :prenom, nom = :nom, role_id = :role_id, password_hash = :password_hash WHERE user_id = :user_id");
-        $query->bindParam(':email', $email, PDO::PARAM_STR);
-        $query->bindParam(':prenom', $prenom, PDO::PARAM_STR);
-        $query->bindParam(':nom', $nom, PDO::PARAM_STR);
-        $query->bindParam(':role_id', $role_id, PDO::PARAM_INT);
-        $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        if ($password_hash !== null) {
-            $query->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
+        try {
+            $db = self::getDBConnection();
+
+            // Construire la clause SET de manière dynamique
+            $set_clause = implode(", ", $fields);
+
+            // Ajouter la condition WHERE
+            $query = $db->prepare("UPDATE users SET $set_clause WHERE user_id = :user_id");
+
+            // Lier les paramètres
+            foreach ($params as $key => $value) {
+                $query->bindValue($key, $value);
+            }
+            $query->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
+            // Exécuter la requête
+            $query->execute();
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage());
+        } finally {
+            $db = null;
         }
-
-        $query->execute();
-
-        $db= null;
     }
+
 
     public static function deletingUser($user_id)
     {
         $db = self::getDBConnection();
-        $query = $db->prepare("DELETE FROM Users WHERE user_id = :user_id");
+        $query = $db->prepare("DELETE FROM users WHERE user_id = :user_id");
         $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $query->execute();
         $db= null;

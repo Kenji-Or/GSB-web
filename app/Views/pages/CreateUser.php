@@ -10,6 +10,17 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
         <div class="text-center p-4 rounded bg-light shadow">
             <h1 class="mb-0">Création d'utilisateur</h1>
         </div>
+        <!-- Affichage du message d'erreur -->
+        <?php if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-danger mt-2">
+                <?php
+                // Utilisation de htmlspecialchars pour éviter les attaques XSS
+                echo htmlspecialchars($_SESSION['error']);
+                // Supprimer le message d'erreur après l'affichage
+                unset($_SESSION['error']);
+                ?>
+            </div>
+        <?php endif; ?>
         <div class="card mt-4 shadow-sm">
             <div class="card-body">
                 <form action="index.php?action=creatinguser" method="POST">
@@ -67,5 +78,5 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
     </div>
     <?php
 }
-include(BASE_PATH . '/app/Views/layouts/footer.html');
+include(BASE_PATH . '/app/Views/layouts/footer.php');
 ?>

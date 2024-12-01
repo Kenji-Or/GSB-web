@@ -31,5 +31,5 @@ $role = $_SESSION['role'];
 </div>
 
 <?php
-include(BASE_PATH . '/app/Views/layouts/footer.html');
+include(BASE_PATH . '/app/Views/layouts/footer.php');
 ?>
