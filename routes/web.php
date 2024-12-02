@@ -3,11 +3,13 @@ use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\RoleController;
 use App\Controllers\DocumentController;
+use App\Controllers\ArticleController;
 
 $authController = new AuthController();
 $userController = new UserController();
 $roleController = new RoleController();
 $documentController = new DocumentController();
+$articleController = new ArticleController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = $_GET['action'] ?? "";
@@ -59,6 +61,12 @@ $routes = [
     $documentId = $matches[1];
     $documentController->deleteDocument($documentId);
     header('Location: index.php?action=documents');
+    exit();
+    },
+    '/^viewArticle\/(\d+)$/' => function($matches) use ($articleController) {
+    $articleId = $matches[1];
+    $article = $articleController->getArticleById($articleId);
+    include '../app/Views/pages/Article.php';
     exit();
     }
 ];
@@ -173,16 +181,69 @@ if (!$routeMatched) {
             break;
 
         case "view_file":
-            $file = $_GET['file'] ?? "";
-            $filePath = "uploads/PDF/$file";
-            if (file_exists($filePath)) {
-                header("Content-Type: application/pdf");
-                readfile($filePath);
-                exit();
+            if ($connected) {
+                $file = $_GET['file'] ?? "";
+                if (str_starts_with($file, 'image_')) {
+                    $filePath = "uploads/img/$file";
+                    if (file_exists($filePath)) {
+                        $fileType = mime_content_type($filePath);
+                        if (strpos($fileType, 'image/') === 0) {
+                            // C'est une image
+                            header("Content-Type: $fileType");
+                            readfile($filePath);
+                            exit();
+                        } else {
+                            echo "Fichier non trouvé.";
+                        }
+                    }
+                } elseif (str_starts_with($file, 'document_')) {
+                    $filePath = "uploads/img/$file";
+                    if (file_exists($filePath)) {
+                        header("Content-Type: application/pdf");
+                        readfile($filePath);
+                        exit();
+                    } else {
+                        echo "Fichier non trouvé.";
+                    }
+                }
             } else {
-                echo "Fichier non trouvé.";
+                header('Location: index.php?action=login');
+                exit();
             }
             break;
+
+        case "actualites":
+            if ($connected) {
+                // Récupérer le numéro de la page depuis l'URL, par défaut la page 1
+                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+                // Appeler la méthode getArticles() en passant le numéro de page
+                $articleController->getArticles($page);
+            } else {
+                // Si l'utilisateur n'est pas connecté, rediriger vers la page de login
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'createArticle':
+            if($connected){
+                include '../app/Views/pages/CreateArticle.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'creatingarticle':
+            if($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                $articleController->addArticle();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
 
         // Route par défaut pour les pages non trouvées
         default:

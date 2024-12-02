@@ -14,6 +14,18 @@ $role = $_SESSION['role'];
         <h1>Bienvenue <?php echo $prenom; ?> sur l’intranet GSB</h1>
     </div>
 
+    <!-- Affichage du message d'erreur -->
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger mt-2">
+            <?php
+            // Utilisation de htmlspecialchars pour éviter les attaques XSS
+            echo htmlspecialchars($_SESSION['error']);
+            // Supprimer le message d'erreur après l'affichage
+            unset($_SESSION['error']);
+            ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Contenu principal divisé en deux sections -->
     <div class="content d-flex flex-wrap mt-4 gap-3">
         <!-- Section Actualité -->

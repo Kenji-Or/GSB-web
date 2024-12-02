@@ -33,8 +33,14 @@ if (!isset($_SESSION['nom'])) {
                 <li class="nav-item">
                     <a class="nav-link text-white" href="index.php?action=documents">Documents</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="index.php?action=actualites">Actualités et annonces</a>
+                <li class="nav-item dropdown">
+                    <button class="nav-link dropdown-toggle text-white" id="deroulanta" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Actualités et Évènements
+                    </button>
+                    <div class="dropdown-menu dropdown-menu" aria-labelledby="deroulanta">
+                        <a class="dropdown-item" href="index.php?action=actualites">Actualités</a>
+                        <a class="dropdown-item" href="index.php?action=event">Évènements</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="index.php?action=forum">Forum</a>
