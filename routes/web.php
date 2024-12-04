@@ -68,6 +68,12 @@ $routes = [
     $article = $articleController->getArticleById($articleId);
     include '../app/Views/pages/Article.php';
     exit();
+    },
+    '/^deletearticle\/(\d+)$/' => function($matches) use ($articleController) {
+    $articleId = $matches[1];
+    $articleController->deleteArticle($articleId);
+    header('Location: index.php?action=actualites');
+    exit();
     }
 ];
 
@@ -107,6 +113,7 @@ if (!$routeMatched) {
         // Page d'accueil (GET) avec vérification de la session
         case 'home':
             if ($connected) {
+                $articles = $articleController->getLastArticles();
                 include '../app/Views/pages/Home.php';
             } else {
                 header('Location: index.php?action=login');
@@ -214,11 +221,8 @@ if (!$routeMatched) {
 
         case "actualites":
             if ($connected) {
-                // Récupérer le numéro de la page depuis l'URL, par défaut la page 1
-                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
                 // Appeler la méthode getArticles() en passant le numéro de page
-                $articleController->getArticles($page);
+                $articleController->getArticles();
             } else {
                 // Si l'utilisateur n'est pas connecté, rediriger vers la page de login
                 header('Location: index.php?action=login');

@@ -31,6 +31,15 @@ if (isset($article)) {
                 <p class="mb-0">Publié le <?= htmlspecialchars($article['date_publication']) ?></p>
             </div>
         </article>
+
+    <?php if ($_SESSION['role'] === 1 || $_SESSION['role'] === 2) { ?>
+        <!-- Bouton Ajouter Utilisateur -->
+        <div class="d-flex justify-content-center mt-4">
+            <a href="index.php?action=deletearticle/<?= $article['id_article'] ?>" class="btn btn-danger">
+                    Supprimer un article
+            </a>
+        </div>
+        <?php } ?>
     </div>
 
     <?php

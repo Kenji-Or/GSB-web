@@ -29,10 +29,35 @@ $role = $_SESSION['role'];
     <!-- Contenu principal divisé en deux sections -->
     <div class="content d-flex flex-wrap mt-4 gap-3">
         <!-- Section Actualité -->
-        <div class="actualites p-4 bg-white rounded flex-fill text-center shadow-sm">
-            <h2>AFFICHAGE DE L'ACTUALITÉ</h2>
-            <p>Contenu d'actualité ici...</p>
-        </div>
+        <?php if (isset($articles) && count($articles) > 0) { ?>
+            <div class="actualites-container p-4 bg-white rounded flex-fill text-center shadow-sm">
+                <?php foreach ($articles as $index => $article) { ?>
+                    <div class="actualite-item" id="article-<?php echo $index; ?>" style="display: <?php echo $index === 0 ? 'block' : 'none'; ?>; background-image: url('index.php?action=view_file&file=<?php echo htmlspecialchars($article['image']); ?>'); background-size: cover;background-position: center;height: 300px;" >
+                        <a class="text-decoration-none text-dark" href="index.php?action=viewArticle/<?= $article['id_article'] ?>">
+                        <h2><?php echo htmlspecialchars($article['titre']); ?></h2>
+                        </a>
+                    </div>
+
+                <?php } ?>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const articles = document.querySelectorAll('.actualite-item');
+                    let currentIndex = 0;
+
+                    setInterval(() => {
+                        // Hide the current article
+                        articles[currentIndex].style.display = 'none';
+
+                        // Show the next article
+                        currentIndex = (currentIndex + 1) % articles.length;
+                        articles[currentIndex].style.display = 'block';
+                    }, 15000); // 15 seconds
+                });
+            </script>
+        <?php } else { ?>
+            <p>Aucune actualité à afficher.</p>
+        <?php } ?>
 
         <!-- Section Événements à venir -->
         <div class="evenements p-4 bg-white rounded text-center shadow-sm" style="width: 300px;">

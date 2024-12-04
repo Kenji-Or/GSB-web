@@ -12,24 +12,24 @@ class Article {
         return require __DIR__ . '/../config/db.php';
     }
 
-    public static function getArticles($page = 1, $articlesParPage = 10)
+    public static function getArticles()
     {
         $db = self::getDBConnection();
-        $offset = ($page - 1) * $articlesParPage;
-        $query = "SELECT * FROM articles ORDER BY date_publication DESC LIMIT :offset, :limit";
+        $query = "SELECT * FROM articles ORDER BY date_publication";
         $stmt = $db->prepare($query);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $stmt->bindValue(':limit', $articlesParPage, PDO::PARAM_INT);
         $stmt->execute();
         $db = null;
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Méthode pour obtenir le nombre total d'articles pour calculer le nombre de pages
-    public static function getTotalArticles() {
+    public static function getLastArticle()
+    {
         $db = self::getDBConnection();
-        $stmt = $db->query("SELECT COUNT(*) FROM articles");
-        return $stmt->fetchColumn();
+        $query = "SELECT * FROM articles ORDER BY date_publication DESC LIMIT 3";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $db = null;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public static function getArticleById($id) {
@@ -51,6 +51,14 @@ class Article {
         $stmt->bindValue(':auteur', $auteur, PDO::PARAM_STR);
         $stmt->bindValue(':image', $image, PDO::PARAM_STR);
         $stmt->bindValue(':date_publication', date('Y-m-d'), PDO::PARAM_STR);
+        $stmt->execute();
+        $db = null;
+    }
+
+    public static function deleteArticle($id) {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("DELETE FROM articles WHERE id_article = :id_article");
+        $stmt->bindValue(':id_article', $id, PDO::PARAM_INT);
         $stmt->execute();
         $db = null;
     }

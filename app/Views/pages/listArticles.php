@@ -40,25 +40,6 @@ include(BASE_PATH . 'app/Views/layouts/header.php');
                 </div>
             <?php endforeach; ?>
         </div>
-
-    <?php if (isset($page) && isset($totalPages)): ?>
-    <!-- Pagination -->
-    <div class="pagination">
-        <?php if ($page > 1): ?>
-            <a href="?page=<?= $page - 1 ?>">Précédent</a>
-        <?php endif; ?>
-
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="?page=<?= $i ?>" <?= $i === $page ? 'class="active"' : '' ?>><?= $i ?></a>
-        <?php endfor; ?>
-
-        <?php if ($page < $totalPages): ?>
-            <a href="?page=<?= $page + 1 ?>">Suivant</a>
-        <?php endif; ?>
-    </div>
-        <?php else: ?>
-            <p></p>
-        <?php endif; ?>
     <?php else: ?>
         <p>Aucun Actualités actuellement.</p>
     <?php endif; ?>

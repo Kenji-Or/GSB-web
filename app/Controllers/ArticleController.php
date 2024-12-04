@@ -3,24 +3,22 @@ namespace App\Controllers;
 use App\Models\Article;
 
 class ArticleController {
-    public function getArticles($page = 1) {
-        // Nombre d'articles à afficher par page
-        $articlesParPage = 10;
+    public function getArticles() {
+
 
         // Récupérer les articles pour cette page
-        $articles = Article::getArticles($page, $articlesParPage);
-
-        // Calculer le nombre total d'articles
-        $totalArticles = Article::getTotalArticles();
-
-        // Calculer le nombre total de pages
-        $totalPages = ceil($totalArticles / $articlesParPage);
+        $articles = Article::getArticles();
 
         require_once __DIR__ . "/../Views/pages/listArticles.php";
     }
 
     public function getArticleById($id) {
         return Article::getArticleById($id);
+    }
+
+    public function getLastArticles()
+    {
+        return Article::getLastArticle();
     }
 
     public function addArticle()
@@ -88,6 +86,44 @@ class ArticleController {
             $_SESSION['error'] = "Méthode non autorisée.";
             header("Location: index.php?action=createArticle");
             exit;
+        }
+    }
+
+    public function deleteArticle($id)
+    {
+        if ($_SESSION['role'] === 1 || $_SESSION['role'] === 2) {
+            $article = Article::getArticleById($id);
+            if ($article && isset($article['image'])) {
+                // Extraire le nom du fichier à partir du paramètre 'file'
+                parse_str(parse_url($article['image'], PHP_URL_QUERY), $queryParams);
+                if (isset($queryParams['file'])) {
+                    $fileName = $queryParams['file'];
+
+                    // Construire le chemin absolu du fichier
+                    $filePath = 'uploads/img/' . $fileName;
+
+                    // Vérifier si le fichier existe
+                    if (file_exists($filePath)) {
+                        // Supprimer le fichier du disque
+                        if (unlink($filePath)) {
+                            // Appeler la méthode pour supprimer l'enregistrement dans la base de données
+                            Article::deleteArticle($id);
+
+                            $_SESSION['success'] = "Article supprimé avec succès.";
+                        } else {
+                            $_SESSION['error'] = "Une erreur est survenue lors de la suppression du fichier.";
+                        }
+                    } else {
+                        $_SESSION['error'] = "Le fichier n'existe pas sur le serveur.";
+                    }
+                } else {
+                    $_SESSION['error'] = "Le paramètre de fichier est manquant ou incorrect.";
+                }
+            } else {
+                $_SESSION['error'] = "Le fichier n'existe pas ou l'ID est invalide.";
+            }
+        } else {
+            $_SESSION['error'] = "Vous n'avez pas l'autorité suffisante pour faire cette action.";
         }
     }
 }
