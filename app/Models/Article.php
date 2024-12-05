@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use PDO;
-use PDOException;
 
 class Article {
     private static function getDBConnection()

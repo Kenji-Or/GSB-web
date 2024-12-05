@@ -60,9 +60,29 @@ $role = $_SESSION['role'];
         <?php } ?>
 
         <!-- Section Événements à venir -->
-        <div class="evenements p-4 bg-white rounded text-center shadow-sm" style="width: 300px;">
-            <h2>ÉVÉNEMENTS À VENIR</h2>
-            <p>Liste des événements à venir ici...</p>
+        <div class="evenements  bg-white rounded text-center shadow-sm" ">
+            <?php if (isset($events) && count($events) > 0) { ?>
+                <div class="row g-4">
+                    <?php foreach ($events as $event): ?>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title text-primary text-center"><?= htmlspecialchars($event['titre_event']); ?></h5>
+                                    <p class="card-text text-center">
+                                        <?= htmlspecialchars($event['description']); ?>
+                                    </p>
+                                    <p class="card-text text-center text-muted mt-auto">
+                                        <small>Date : <?= htmlspecialchars(date("d/m/Y H:i", strtotime($event['date_start']))) ?></small>
+                                    </p>
+                                    <a href="index.php?action=listEvent" class="btn btn-primary w-100 mt-3">En savoir plus</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php } else { ?>
+                <p>Aucun évènement à venir.</p>
+            <?php } ?>
         </div>
     </div>
 </div>

@@ -137,7 +137,7 @@ class UserController
                 }
 
                 // Vérifier si l'utilisateur connecté a le rôle 'admin' (role_id = 1)
-                $current_user_role_id = $_SESSION['user_role_id'] ?? null; // Supposons que le rôle est stocké dans la session.
+                $current_user_role_id = $_SESSION['role'] ?? null; // Supposons que le rôle est stocké dans la session.
 
                 // Construire dynamiquement les champs à mettre à jour
                 $fields = [

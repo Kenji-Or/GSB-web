@@ -39,7 +39,7 @@ if (!isset($_SESSION['nom'])) {
                     </button>
                     <div class="dropdown-menu dropdown-menu" aria-labelledby="deroulanta">
                         <a class="dropdown-item" href="index.php?action=actualites">Actualités</a>
-                        <a class="dropdown-item" href="index.php?action=event">Évènements</a>
+                        <a class="dropdown-item" href="index.php?action=listEvent">Évènements</a>
                     </div>
                 </li>
                 <li class="nav-item">

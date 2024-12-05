@@ -4,12 +4,7 @@ use App\Models\Article;
 
 class ArticleController {
     public function getArticles() {
-
-
-        // Récupérer les articles pour cette page
-        $articles = Article::getArticles();
-
-        require_once __DIR__ . "/../Views/pages/listArticles.php";
+        return Article::getArticles();
     }
 
     public function getArticleById($id) {

@@ -4,12 +4,14 @@ use App\Controllers\UserController;
 use App\Controllers\RoleController;
 use App\Controllers\DocumentController;
 use App\Controllers\ArticleController;
+use App\Controllers\EvenementController;
 
 $authController = new AuthController();
 $userController = new UserController();
 $roleController = new RoleController();
 $documentController = new DocumentController();
 $articleController = new ArticleController();
+$evenementController = new EvenementController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = $_GET['action'] ?? "";
@@ -74,6 +76,12 @@ $routes = [
     $articleController->deleteArticle($articleId);
     header('Location: index.php?action=actualites');
     exit();
+    },
+    '/^deleteEvent\/(\d+)$/' => function($matches) use ($evenementController) {
+    $evenementId = $matches[1];
+    $evenementController->deleteEvenement($evenementId);
+    header('Location: index.php?action=listEvent');
+    exit();
     }
 ];
 
@@ -114,6 +122,7 @@ if (!$routeMatched) {
         case 'home':
             if ($connected) {
                 $articles = $articleController->getLastArticles();
+                $events = $evenementController->nextEvent();
                 include '../app/Views/pages/Home.php';
             } else {
                 header('Location: index.php?action=login');
@@ -222,7 +231,8 @@ if (!$routeMatched) {
         case "actualites":
             if ($connected) {
                 // Appeler la méthode getArticles() en passant le numéro de page
-                $articleController->getArticles();
+                $articles = $articleController->getArticles();
+                include '../app/Views/pages/listArticles.php';
             } else {
                 // Si l'utilisateur n'est pas connecté, rediriger vers la page de login
                 header('Location: index.php?action=login');
@@ -242,6 +252,36 @@ if (!$routeMatched) {
         case 'creatingarticle':
             if($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
                 $articleController->addArticle();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'listEvent':
+            if ($connected) {
+                $events = $evenementController->getAllEvenements();
+                include '../app/Views/pages/listEvent.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+
+        case 'createevent':
+            if($connected){
+                include '../app/Views/pages/CreateEvent.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+
+        case 'creatingevent':
+            if($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                $evenementController->createEvenement();
             } else {
                 header('Location: index.php?action=login');
                 exit();
