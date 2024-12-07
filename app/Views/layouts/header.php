@@ -43,7 +43,7 @@ if (!isset($_SESSION['nom'])) {
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="index.php?action=forum">Forum</a>
+                    <a class="nav-link text-white" href="index.php?action=listForum">Forum</a>
                 </li>
                 <?php
                 if(($_SESSION["role"] === 1)){

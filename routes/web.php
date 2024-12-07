@@ -5,6 +5,8 @@ use App\Controllers\RoleController;
 use App\Controllers\DocumentController;
 use App\Controllers\ArticleController;
 use App\Controllers\EvenementController;
+use App\Controllers\ForumController;
+use App\Controllers\PostForumController;
 
 $authController = new AuthController();
 $userController = new UserController();
@@ -12,6 +14,8 @@ $roleController = new RoleController();
 $documentController = new DocumentController();
 $articleController = new ArticleController();
 $evenementController = new EvenementController();
+$forumController = new ForumController();
+$postForumController = new PostForumController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = $_GET['action'] ?? "";
@@ -81,6 +85,12 @@ $routes = [
     $evenementId = $matches[1];
     $evenementController->deleteEvenement($evenementId);
     header('Location: index.php?action=listEvent');
+    exit();
+    },
+    '/^deleteDiscussion\/(\d+)$/' => function($matches) use ($forumController) {
+    $forumId = $matches[1];
+    $forumController->deleteForum($forumId);
+    header('Location: index.php?action=listForum');
     exit();
     }
 ];
@@ -268,6 +278,16 @@ if (!$routeMatched) {
             }
             break;
 
+        case 'listForum':
+            if ($connected) {
+                $forum = $forumController->getAllForums();
+                include '../app/Views/pages/Forum.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
 
         case 'createevent':
             if($connected){
@@ -282,6 +302,52 @@ if (!$routeMatched) {
         case 'creatingevent':
             if($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
                 $evenementController->createEvenement();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'createForum':
+            if ($connected) {
+                include '../app/Views/pages/CreateForum.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'creatingforum':
+            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
+                $forumController->createForum();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'forum':
+            if ($connected) {
+                $discussion = $postForumController->getPostForum();
+                include '../app/Views/pages/DiscussionForum.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'postforum':
+            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $postForumController->postPostForum();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'deleteDiscussion':
+            if ($connected) {
+                $forumController->deleteForum();
             } else {
                 header('Location: index.php?action=login');
                 exit();

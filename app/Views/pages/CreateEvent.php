@@ -3,7 +3,9 @@ include (BASE_PATH . '/app/Views/layouts/header.php');
 if (isset($_SESSION['role']) && $_SESSION['role'] !== 3) {
 ?>
 <div class="container my-5 flex-grow-1">
-    <h1 class="mb-4">Créer un nouvel évènement</h1>
+    <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
+        <h1 class="display-4">Créer un nouvel évènement</h1>
+    </div>
     <!-- Affichage du message d'erreur -->
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger mt-2">
