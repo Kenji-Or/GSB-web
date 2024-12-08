@@ -1,7 +1,7 @@
 <?php
 include (BASE_PATH . '/App/Views/layouts/header.php');
 ?>
-<div class="container my-4 flex-grow-1">
+<div class="container my-5 flex-grow-1">
     <!-- Titre de la page -->
     <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
         <h1 class="display-4">Forum</h1>
@@ -47,10 +47,11 @@ if (isset($forum) && count($forum) > 0):
             </li>
         <?php endforeach; ?>
     </ul>
+<?php
+else: ?>
+    <p>Aucune discussion actuellement.</p>
+<?php endif; ?>
 </div>
 
 <?php
- else: ?>
-    <p>Aucune discussion actuellement.</p>
-<?php endif;
 include (BASE_PATH . '/App/Views/layouts/footer.php');

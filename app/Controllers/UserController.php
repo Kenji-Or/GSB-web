@@ -16,8 +16,7 @@ $dotenv->load();
 class UserController
 {
     public function listUsers() {
-        $users = User::getAllUsers();
-        require_once __DIR__ . '/../Views/pages/GestionAcces.php';
+        return User::getAllUsers();
     }
 
     public function editUser($id)

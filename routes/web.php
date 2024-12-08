@@ -142,7 +142,8 @@ if (!$routeMatched) {
 
         case 'GestionAcces':
             if ($connected) {
-                $userController->listUsers();
+                $users = $userController->listUsers();
+                include '../app/Views/pages/GestionAcces.php';
             } else {
                 header('Location: index.php?action=login');
                 exit();
@@ -310,6 +311,8 @@ if (!$routeMatched) {
 
         case 'createForum':
             if ($connected) {
+                $roles = $roleController->listRoles();
+                $users = $userController->listUsers();
                 include '../app/Views/pages/CreateForum.php';
             } else {
                 header('Location: index.php?action=login');
