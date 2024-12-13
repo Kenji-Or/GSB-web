@@ -55,9 +55,6 @@ if (!isset($_SESSION['nom'])) {
                 }
                 ?>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="index.php?action=support">Support technique</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link text-white" href="index.php?action=contact">Contact</a>
                 </li>
                 <li class="nav-item dropdown">

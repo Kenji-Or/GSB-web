@@ -7,6 +7,7 @@ use App\Controllers\ArticleController;
 use App\Controllers\EvenementController;
 use App\Controllers\ForumController;
 use App\Controllers\PostForumController;
+use App\Controllers\ContactController;
 
 $authController = new AuthController();
 $userController = new UserController();
@@ -16,6 +17,7 @@ $articleController = new ArticleController();
 $evenementController = new EvenementController();
 $forumController = new ForumController();
 $postForumController = new PostForumController();
+$contactController = new ContactController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = $_GET['action'] ?? "";
@@ -351,6 +353,24 @@ if (!$routeMatched) {
         case 'deleteDiscussion':
             if ($connected) {
                 $forumController->deleteForum();
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'contact' :
+            if ($connected) {
+                include '../app/Views/pages/Contact.php';
+            } else {
+                header('Location: index.php?action=login');
+                exit();
+            }
+            break;
+
+        case 'sendDataContact':
+            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $contactController->envoieContact();
             } else {
                 header('Location: index.php?action=login');
                 exit();
