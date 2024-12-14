@@ -58,6 +58,7 @@ if (isset($user)) {
 
                 </div>
             </div>
+            <a class="mt-5" href="index.php?action=mentionLegales">Mentions Légales</a>
         </div>
         <?php
     } else {

@@ -226,7 +226,7 @@ if (!$routeMatched) {
                         }
                     }
                 } elseif (str_starts_with($file, 'document_')) {
-                    $filePath = "uploads/img/$file";
+                    $filePath = "uploads/PDF/$file";
                     if (file_exists($filePath)) {
                         header("Content-Type: application/pdf");
                         readfile($filePath);
@@ -375,6 +375,18 @@ if (!$routeMatched) {
                 header('Location: index.php?action=login');
                 exit();
             }
+            break;
+
+        case 'conditionUtilisation':
+            include '../app/Views/pages/ConditionsUtilisation.php';
+            break;
+
+        case 'politiqueConfidentialite':
+            include '../app/Views/pages/PolitiqueConfidentialite.php';
+            break;
+
+        case 'mentionLegales':
+            include '../app/Views/pages/MentionsLegales.php';
             break;
 
 

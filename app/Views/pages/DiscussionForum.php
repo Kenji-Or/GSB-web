@@ -2,7 +2,7 @@
 include (BASE_PATH . '/App/Views/layouts/header.php');
 if (isset($discussion)):
 ?>
-<div class="container-fluid flex-grow-1" style="display: flex;
+<div class="container flex-grow-1" style="display: flex;
             flex-direction: column;
             height:80vh;">
     <h1>Discussion</h1>
@@ -17,7 +17,12 @@ if (isset($discussion)):
             ?>
         </div>
     <?php endif; ?>
-    <a href="index.php?action=listForum" class="btn btn-secondary mb-3 btn-sm float-start">Retour aux sujets</a>
+    <!--<a href="index.php?action=listForum" class="btn btn-secondary mb-3 btn-sm float-start">Retour aux sujets</a>-->
+    <a href="index.php?action=listForum">
+        <button onclick="history.back()" class="btn btn-outline-primary  mb-3">
+        Retour
+        </button>
+    </a>
 
     <div id="messages" style="flex: 1;
             overflow-y: auto;
