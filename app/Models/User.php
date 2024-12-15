@@ -91,6 +91,15 @@ class User
         }
     }
 
+    public static function updatePassword($userId, $password) {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare('UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id');
+        $stmt->execute([
+            'password_hash' => password_hash($password, PASSWORD_BCRYPT),
+            'user_id' => $userId
+        ]);
+    }
+
 
     public static function deletingUser($user_id)
     {

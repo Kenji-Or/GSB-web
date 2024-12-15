@@ -8,6 +8,7 @@ use App\Controllers\EvenementController;
 use App\Controllers\ForumController;
 use App\Controllers\PostForumController;
 use App\Controllers\ContactController;
+use App\Controllers\PasswordController;
 
 $authController = new AuthController();
 $userController = new UserController();
@@ -18,6 +19,7 @@ $evenementController = new EvenementController();
 $forumController = new ForumController();
 $postForumController = new PostForumController();
 $contactController = new ContactController();
+$passwordController = new PasswordController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = $_GET['action'] ?? "";
@@ -389,6 +391,27 @@ if (!$routeMatched) {
             include '../app/Views/pages/MentionsLegales.php';
             break;
 
+        case 'passwordoublier':
+            include '../app/Views/pages/EmailResetPassword.php';
+            break;
+
+        case 'resetpassword':
+            $passwordController->sendResetLink();
+            break;
+
+        case 'linkResetPassword':
+            $token = $_GET['token'] ?? "";
+            include '../app/Views/pages/NewPassword.php';
+            break;
+
+        case 'newpassword':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $passwordController->resetPassword();
+            } else {
+                header('Location: index.php?action=passwordoublier');
+                exit();
+            }
+            break;
 
         // Route par défaut pour les pages non trouvées
         default:

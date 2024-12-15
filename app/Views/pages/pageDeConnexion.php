@@ -58,7 +58,7 @@
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="d-flex justify-content-end mt-2">
-                        <a href="index.php?action=forgotPassword" class="link-primary">Mot de passe oublié ?</a>
+                        <a href="index.php?action=passwordoublier" class="link-primary">Mot de passe oublié ?</a>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mt-3">Se connecter</button>
                 </form>
