@@ -58,7 +58,7 @@ class ForumController
 
     public function deleteForum($id)
     {
-        if ($_SESSION['role'] === 1) { // Vérifie si l'utilisateur est admin
+        if ($_SESSION['role'] === 1 || $_SESSION['role'] === 2) { // Vérifie si l'utilisateur est admin
             $idForum = htmlspecialchars(trim($id ?? null), ENT_QUOTES, 'UTF-8');
             if (!$idForum) {
                 $_SESSION['error'] = "Forum invalide.";

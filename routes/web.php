@@ -23,7 +23,17 @@ $passwordController = new PasswordController();
 
 // Vérifie si une action est définie dans l'URL, sinon utilise une chaîne vide
 $action = $_GET['action'] ?? "";
-$connected = isset($_SESSION['nom']) ? true : false;
+function connected()
+{
+    global $authController;
+    $user_id = $authController->verifyToken($_SESSION['token'] ?? '');
+    if ($user_id  !== null) {
+        return true;
+    } else {
+        $authController->logout();
+        return false;
+    }
+}
 
 $routes = [
     '/^edit\/(\d+)$/' => function($matches) use ($userController, $roleController) {
@@ -102,7 +112,7 @@ $routes = [
 $routeMatched = false;
 
 foreach ($routes as $pattern => $callback) {
-    if ($connected) {
+    if (connected()) {
         if (preg_match($pattern, $action, $matches)) {
             $routeMatched = true;
             $callback($matches); // Appelle la fonction associée à la route
@@ -134,7 +144,7 @@ if (!$routeMatched) {
 
         // Page d'accueil (GET) avec vérification de la session
         case 'home':
-            if ($connected) {
+            if (connected()) {
                 $articles = $articleController->getLastArticles();
                 $events = $evenementController->nextEvent();
                 include '../app/Views/pages/Home.php';
@@ -145,7 +155,7 @@ if (!$routeMatched) {
             break;
 
         case 'GestionAcces':
-            if ($connected) {
+            if (connected()) {
                 $users = $userController->listUsers();
                 include '../app/Views/pages/GestionAcces.php';
             } else {
@@ -155,7 +165,7 @@ if (!$routeMatched) {
             break;
 
         case 'createUser':
-            if ($connected) {
+            if (connected()) {
                 $roles = $roleController->listRoles();
                 include '../app/Views/pages/CreateUser.php';
             } else {
@@ -165,7 +175,7 @@ if (!$routeMatched) {
             break;
 
         case 'creatinguser':
-            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['role'] === 1) {
+            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['role'] === 1) {
                 $userController->addingUser();
             } else {
                 http_response_code(405);
@@ -174,7 +184,7 @@ if (!$routeMatched) {
             break;
 
         case 'documents':
-            if ($connected) {
+            if (connected()) {
                 $documents = $documentController->getAllDocuments();
                 include '../app/Views/pages/listDocuments.php';
             } else {
@@ -184,7 +194,7 @@ if (!$routeMatched) {
             break;
 
         case 'searchdocument':
-            if ($connected) {
+            if (connected()) {
                 $documents = $documentController->searchDocumentByTitle();
                 include '../app/Views/pages/listDocuments.php';
             } else {
@@ -194,7 +204,7 @@ if (!$routeMatched) {
             break;
 
         case 'createdocument':
-            if ($connected) {
+            if (connected()) {
                 include '../app/Views/pages/CreateDocument.php';
             } else {
                 header('Location: index.php?action=login');
@@ -203,7 +213,7 @@ if (!$routeMatched) {
             break;
 
         case 'creatingdocument':
-            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 $documentController->createDocument();
             } else {
                 header('Location: index.php?action=login');
@@ -212,7 +222,7 @@ if (!$routeMatched) {
             break;
 
         case "view_file":
-            if ($connected) {
+            if (connected()) {
                 $file = $_GET['file'] ?? "";
                 if (str_starts_with($file, 'image_')) {
                     $filePath = "uploads/img/$file";
@@ -244,7 +254,7 @@ if (!$routeMatched) {
             break;
 
         case "actualites":
-            if ($connected) {
+            if (connected()) {
                 // Appeler la méthode getArticles() en passant le numéro de page
                 $articles = $articleController->getArticles();
                 include '../app/Views/pages/listArticles.php';
@@ -256,7 +266,7 @@ if (!$routeMatched) {
             break;
 
         case 'createArticle':
-            if($connected){
+            if(connected()){
                 include '../app/Views/pages/CreateArticle.php';
             } else {
                 header('Location: index.php?action=login');
@@ -265,7 +275,7 @@ if (!$routeMatched) {
             break;
 
         case 'creatingarticle':
-            if($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            if(connected() && $_SERVER['REQUEST_METHOD'] === 'POST'){
                 $articleController->addArticle();
             } else {
                 header('Location: index.php?action=login');
@@ -274,7 +284,7 @@ if (!$routeMatched) {
             break;
 
         case 'listEvent':
-            if ($connected) {
+            if (connected()) {
                 $events = $evenementController->getAllEvenements();
                 include '../app/Views/pages/listEvent.php';
             } else {
@@ -284,7 +294,7 @@ if (!$routeMatched) {
             break;
 
         case 'listForum':
-            if ($connected) {
+            if (connected()) {
                 $forum = $forumController->getAllForums();
                 include '../app/Views/pages/Forum.php';
             } else {
@@ -295,7 +305,7 @@ if (!$routeMatched) {
 
 
         case 'createevent':
-            if($connected){
+            if(connected()){
                 include '../app/Views/pages/CreateEvent.php';
             } else {
                 header('Location: index.php?action=login');
@@ -305,7 +315,7 @@ if (!$routeMatched) {
 
 
         case 'creatingevent':
-            if($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            if(connected() && $_SERVER['REQUEST_METHOD'] === 'POST'){
                 $evenementController->createEvenement();
             } else {
                 header('Location: index.php?action=login');
@@ -314,7 +324,7 @@ if (!$routeMatched) {
             break;
 
         case 'createForum':
-            if ($connected) {
+            if (connected()) {
                 $roles = $roleController->listRoles();
                 $users = $userController->listUsers();
                 include '../app/Views/pages/CreateForum.php';
@@ -325,7 +335,7 @@ if (!$routeMatched) {
             break;
 
         case 'creatingforum':
-            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST'){
                 $forumController->createForum();
             } else {
                 header('Location: index.php?action=login');
@@ -334,7 +344,7 @@ if (!$routeMatched) {
             break;
 
         case 'forum':
-            if ($connected) {
+            if (connected()) {
                 $discussion = $postForumController->getPostForum();
                 include '../app/Views/pages/DiscussionForum.php';
             } else {
@@ -344,7 +354,7 @@ if (!$routeMatched) {
             break;
 
         case 'postforum':
-            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 $postForumController->postPostForum();
             } else {
                 header('Location: index.php?action=login');
@@ -353,7 +363,7 @@ if (!$routeMatched) {
             break;
 
         case 'deleteDiscussion':
-            if ($connected) {
+            if (connected()) {
                 $forumController->deleteForum();
             } else {
                 header('Location: index.php?action=login');
@@ -362,7 +372,7 @@ if (!$routeMatched) {
             break;
 
         case 'contact' :
-            if ($connected) {
+            if (connected()) {
                 include '../app/Views/pages/Contact.php';
             } else {
                 header('Location: index.php?action=login');
@@ -371,7 +381,7 @@ if (!$routeMatched) {
             break;
 
         case 'sendDataContact':
-            if ($connected && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 $contactController->envoieContact();
             } else {
                 header('Location: index.php?action=login');

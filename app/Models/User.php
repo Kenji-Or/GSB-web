@@ -100,6 +100,31 @@ class User
         ]);
     }
 
+    public static function saveToken($userId, $token, $expireAt)
+    {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("INSERT INTO user_token (user_id, token, expire_at) VALUES (:user_id, :token, :expire_at)");
+        $stmt->execute([$userId, $token, $expireAt]);
+        $db = null;
+    }
+
+    public static function verifyToken($tekon)
+    {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("SELECT user_id FROM user_token WHERE token = :token AND expire_at > NOW()");
+        $stmt->execute([$tekon]);
+        $db= null;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function deleteToken($token)
+    {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("DELETE FROM user_token WHERE token = :token");
+        $stmt->execute([$token]);
+        $db= null;
+    }
+
 
     public static function deletingUser($user_id)
     {

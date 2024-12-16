@@ -19,19 +19,10 @@ class Evenement
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function eventFindById($id)
-    {
-        $db = self::getDBConnection();
-        $stmt = $db->prepare('SELECT * FROM evenements WHERE id_event = :id_event');
-        $stmt->execute(['id_event' => $id]);
-        $db = null;
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
     public static function nextEvent()
     {
         $db = self::getDBConnection();
-        $stmt = $db->prepare('SELECT * FROM evenements ORDER BY date_start ASC LIMIT 3');
+        $stmt = $db->prepare('SELECT * FROM evenements WHERE date_end >= NOW() ORDER BY date_start ASC LIMIT 3');
         $stmt->execute();
         $db = null;
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -39,7 +39,7 @@ if (isset($forum) && count($forum) > 0):
                 </a>
                 <br>
                 <small>Créé par <?= htmlspecialchars($thread['prenom']) ?> le <?= htmlspecialchars(date("d/m/Y", strtotime($thread['date_creation']))) ?></small>
-                <?php if ($_SESSION['role'] === 1) { ?>
+                <?php if ($_SESSION['role'] === 1 || ($thread['user_id'] === $_SESSION['user_id'] && $_SESSION['role'] === 2)) { ?>
                     <div class="text-end">
                     <a class="btn btn-danger" href="index.php?action=deleteDiscussion/<?= htmlspecialchars($thread['id_forum']) ?>">Supprimer sujet</a>
                     </div>

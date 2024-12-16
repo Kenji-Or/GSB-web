@@ -40,7 +40,7 @@ class UserController
 
         try {
             // Vérifier si l'utilisateur connecté a le rôle 'admin' (role_id = 1)
-            $current_user_role_id = $_SESSION['user_role_id'] ?? null; // Supposons que le rôle est stocké dans la session.
+            $current_user_role_id = $_SESSION['role'] ?? null; // Supposons que le rôle est stocké dans la session.
             if ($current_user_role_id !== 1) {
                 $_SESSION['error'] = "Vous n'avez pas les droits nécessaires pour créer un utilisateur.";
                 header("Location: index.php?action=GestionAcces");
