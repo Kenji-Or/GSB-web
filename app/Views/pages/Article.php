@@ -7,17 +7,6 @@ if (isset($article)) {
         <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
             <h1 class="display-4"><?= htmlspecialchars($article['titre'])?></h1>
         </div>
-        <!-- Affichage du message d'erreur -->
-        <?php if (isset($_SESSION['error'])): ?>
-            <div class="alert alert-danger mt-2">
-                <?php
-                // Utilisation de htmlspecialchars pour éviter les attaques XSS
-                echo htmlspecialchars($_SESSION['error']);
-                // Supprimer le message d'erreur après l'affichage
-                unset($_SESSION['error']);
-                ?>
-            </div>
-        <?php endif; ?>
         <article>
             <!-- Contenu de l'article -->
             <div class="fs-5 lh-lg">

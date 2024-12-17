@@ -13,7 +13,7 @@ class EvenementController {
     }
 
     public function createEvenement() {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['role'] === 1) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['role'] !== 3) {
             $titre = htmlspecialchars(trim($_POST['titre'] ?? ''), ENT_QUOTES, 'UTF-8');
             $description = htmlspecialchars(trim($_POST['description'] ?? ''), ENT_QUOTES, 'UTF-8');
             $dateStart = htmlspecialchars(trim($_POST['dateStart'] ?? ''), ENT_QUOTES, 'UTF-8');
@@ -47,7 +47,7 @@ class EvenementController {
     }
 
     public function deleteEvenement($id) {
-        if ($_SESSION['role'] === 1) {
+        if ($_SESSION['role'] !== 3) {
             $deleteEvent = Evenement::deleteEvent($id);
             if ($deleteEvent === true) {
                 $_SESSION['success'] = 'Evènement supprimé.';

@@ -26,13 +26,33 @@ $action = $_GET['action'] ?? "";
 function connected()
 {
     global $authController;
-    $user_id = $authController->verifyToken($_SESSION['token'] ?? '');
-    if ($user_id  !== null) {
+    if (!isset($_SESSION['token'])) {
+        return false;
+    }
+    $user_id = $authController->verifyToken($_SESSION['token']);
+    if ($user_id ) {
         return true;
     } else {
         $authController->logout();
-        return false;
+        header('Location: index.php?action=login');
+        exit();
     }
+}
+
+$publicActions = [
+    'login',
+    'authentification',
+    'logout',
+    'passwordoublier',
+    'resetpassword',
+    'linkResetPassword',
+    'newpassword'
+];
+
+if (!in_array($action, $publicActions) && !connected()) {
+    // Redirige uniquement si l'action n'est pas publique et l'utilisateur non connecté
+    header('Location: index.php?action=login');
+    exit();
 }
 
 $routes = [
@@ -111,8 +131,23 @@ $routes = [
 
 $routeMatched = false;
 
+//// Liste des actions accessibles sans connexion
+//$publicActions = ['login', 'authentification', 'logout', 'passwordoublier', 'resetpassword', 'linkResetPassword', 'newpassword'];
+//
+//// Vérifie si l'action courante est publique
+//$isPublicAction = in_array($action, $publicActions);
+//
+//if (!$isPublicAction && !connected()) {
+//    // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+//    header('Location: index.php?action=login');
+//    exit();
+//}
+
 foreach ($routes as $pattern => $callback) {
-    if (connected()) {
+    if (!connected()) {
+        $routeMatched = false;
+        break;
+    } else if (connected()) {
         if (preg_match($pattern, $action, $matches)) {
             $routeMatched = true;
             $callback($matches); // Appelle la fonction associée à la route
@@ -144,38 +179,23 @@ if (!$routeMatched) {
 
         // Page d'accueil (GET) avec vérification de la session
         case 'home':
-            if (connected()) {
-                $articles = $articleController->getLastArticles();
-                $events = $evenementController->nextEvent();
-                include '../app/Views/pages/Home.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $articles = $articleController->getLastArticles();
+            $events = $evenementController->nextEvent();
+            include '../app/Views/pages/Home.php';
             break;
 
         case 'GestionAcces':
-            if (connected()) {
-                $users = $userController->listUsers();
-                include '../app/Views/pages/GestionAcces.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $users = $userController->listUsers();
+            include '../app/Views/pages/GestionAcces.php';
             break;
 
         case 'createUser':
-            if (connected()) {
-                $roles = $roleController->listRoles();
-                include '../app/Views/pages/CreateUser.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $roles = $roleController->listRoles();
+            include '../app/Views/pages/CreateUser.php';
             break;
 
         case 'creatinguser':
-            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['role'] === 1) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['role'] === 1) {
                 $userController->addingUser();
             } else {
                 http_response_code(405);
@@ -184,36 +204,21 @@ if (!$routeMatched) {
             break;
 
         case 'documents':
-            if (connected()) {
-                $documents = $documentController->getAllDocuments();
-                include '../app/Views/pages/listDocuments.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $documents = $documentController->getAllDocuments();
+            include '../app/Views/pages/listDocuments.php';
             break;
 
         case 'searchdocument':
-            if (connected()) {
-                $documents = $documentController->searchDocumentByTitle();
-                include '../app/Views/pages/listDocuments.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $documents = $documentController->searchDocumentByTitle();
+            include '../app/Views/pages/listDocuments.php';
             break;
 
         case 'createdocument':
-            if (connected()) {
-                include '../app/Views/pages/CreateDocument.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            include '../app/Views/pages/CreateDocument.php';
             break;
 
         case 'creatingdocument':
-            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $documentController->createDocument();
             } else {
                 header('Location: index.php?action=login');
@@ -222,60 +227,44 @@ if (!$routeMatched) {
             break;
 
         case "view_file":
-            if (connected()) {
-                $file = $_GET['file'] ?? "";
-                if (str_starts_with($file, 'image_')) {
-                    $filePath = "uploads/img/$file";
-                    if (file_exists($filePath)) {
-                        $fileType = mime_content_type($filePath);
-                        if (strpos($fileType, 'image/') === 0) {
-                            // C'est une image
-                            header("Content-Type: $fileType");
-                            readfile($filePath);
-                            exit();
-                        } else {
-                            echo "Fichier non trouvé.";
-                        }
-                    }
-                } elseif (str_starts_with($file, 'document_')) {
-                    $filePath = "uploads/PDF/$file";
-                    if (file_exists($filePath)) {
-                        header("Content-Type: application/pdf");
+            $file = $_GET['file'] ?? "";
+            if (str_starts_with($file, 'image_')) {
+                $filePath = "uploads/img/$file";
+                if (file_exists($filePath)) {
+                    $fileType = mime_content_type($filePath);
+                    if (strpos($fileType, 'image/') === 0) {
+                        // C'est une image
+                        header("Content-Type: $fileType");
                         readfile($filePath);
                         exit();
                     } else {
                         echo "Fichier non trouvé.";
                     }
                 }
-            } else {
-                header('Location: index.php?action=login');
-                exit();
+            } elseif (str_starts_with($file, 'document_')) {
+                $filePath = "uploads/PDF/$file";
+                if (file_exists($filePath)) {
+                    header("Content-Type: application/pdf");
+                    readfile($filePath);
+                    exit();
+                } else {
+                    echo "Fichier non trouvé.";
+                }
             }
             break;
 
         case "actualites":
-            if (connected()) {
-                // Appeler la méthode getArticles() en passant le numéro de page
-                $articles = $articleController->getArticles();
-                include '../app/Views/pages/listArticles.php';
-            } else {
-                // Si l'utilisateur n'est pas connecté, rediriger vers la page de login
-                header('Location: index.php?action=login');
-                exit();
-            }
+            // Appeler la méthode getArticles() en passant le numéro de page
+            $articles = $articleController->getArticles();
+            include '../app/Views/pages/listArticles.php';
             break;
 
         case 'createArticle':
-            if(connected()){
-                include '../app/Views/pages/CreateArticle.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            include '../app/Views/pages/CreateArticle.php';
             break;
 
         case 'creatingarticle':
-            if(connected() && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $articleController->addArticle();
             } else {
                 header('Location: index.php?action=login');
@@ -284,38 +273,23 @@ if (!$routeMatched) {
             break;
 
         case 'listEvent':
-            if (connected()) {
-                $events = $evenementController->getAllEvenements();
-                include '../app/Views/pages/listEvent.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $events = $evenementController->getAllEvenements();
+            include '../app/Views/pages/listEvent.php';
             break;
 
         case 'listForum':
-            if (connected()) {
-                $forum = $forumController->getAllForums();
-                include '../app/Views/pages/Forum.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $forum = $forumController->getAllForums();
+            include '../app/Views/pages/Forum.php';
             break;
 
 
         case 'createevent':
-            if(connected()){
-                include '../app/Views/pages/CreateEvent.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            include '../app/Views/pages/CreateEvent.php';
             break;
 
 
         case 'creatingevent':
-            if(connected() && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $evenementController->createEvenement();
             } else {
                 header('Location: index.php?action=login');
@@ -324,18 +298,13 @@ if (!$routeMatched) {
             break;
 
         case 'createForum':
-            if (connected()) {
-                $roles = $roleController->listRoles();
-                $users = $userController->listUsers();
-                include '../app/Views/pages/CreateForum.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $roles = $roleController->listRoles();
+            $users = $userController->listUsers();
+            include '../app/Views/pages/CreateForum.php';
             break;
 
         case 'creatingforum':
-            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 $forumController->createForum();
             } else {
                 header('Location: index.php?action=login');
@@ -344,17 +313,12 @@ if (!$routeMatched) {
             break;
 
         case 'forum':
-            if (connected()) {
-                $discussion = $postForumController->getPostForum();
-                include '../app/Views/pages/DiscussionForum.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $discussion = $postForumController->getPostForum();
+            include '../app/Views/pages/DiscussionForum.php';
             break;
 
         case 'postforum':
-            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $postForumController->postPostForum();
             } else {
                 header('Location: index.php?action=login');
@@ -363,25 +327,15 @@ if (!$routeMatched) {
             break;
 
         case 'deleteDiscussion':
-            if (connected()) {
-                $forumController->deleteForum();
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            $forumController->deleteForum();
             break;
 
         case 'contact' :
-            if (connected()) {
-                include '../app/Views/pages/Contact.php';
-            } else {
-                header('Location: index.php?action=login');
-                exit();
-            }
+            include '../app/Views/pages/Contact.php';
             break;
 
         case 'sendDataContact':
-            if (connected() && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $contactController->envoieContact();
             } else {
                 header('Location: index.php?action=login');

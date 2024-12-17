@@ -6,18 +6,6 @@ if (isset($discussion)):
             flex-direction: column;
             height:80vh;">
     <h1>Discussion</h1>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
-    <!--<a href="index.php?action=listForum" class="btn btn-secondary mb-3 btn-sm float-start">Retour aux sujets</a>-->
     <a href="index.php?action=listForum">
         <button onclick="history.back()" class="btn btn-outline-primary  mb-3">
         Retour

@@ -38,7 +38,6 @@ class AuthController
                 // Afficher un message d'erreur si les informations ne correspondent pas
                 $_SESSION['error'] = "Email ou mot de passe incorrect.";
                 header("Location: index.php?action=login");
-                http_response_code(401);
                 exit;
             }
         }
@@ -51,8 +50,8 @@ class AuthController
 
     public function logout()
     {
-        session_start();
         User::deleteToken($_SESSION['token']);
+        session_unset();
         session_destroy();
         header("Location: index.php?action=login");
         exit;

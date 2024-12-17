@@ -73,11 +73,20 @@ if (!isset($_SESSION['nom'])) {
     </div>
 </nav>
 <?php if (isset($_SESSION['success'])): ?>
-    <div id="success-alert" class="alert alert-success mb-3">
+    <div id="success-alert" class="alert alert-success mb-3 position-fixed top-0 end-0" style="max-width: 300px; z-index: 1150; margin-top: 100px;">
         <?php
         // Utilisation de htmlspecialchars pour éviter les attaques XSS
         echo htmlspecialchars($_SESSION['success']);
         unset($_SESSION['success']);
+        ?>
+    </div>
+<?php endif; ?>
+<?php if (isset($_SESSION['error'])): ?>
+    <div id="danger-alert" class="alert alert-danger mb-3 position-fixed top-0 end-0" style="max-width: 300px; z-index: 1150; margin-top: 100px;">
+        <?php
+        // Utilisation de htmlspecialchars pour éviter les attaques XSS
+        echo htmlspecialchars($_SESSION['error']);
+        unset($_SESSION['error']);
         ?>
     </div>
 <?php endif; ?>

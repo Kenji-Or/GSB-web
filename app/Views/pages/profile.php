@@ -53,7 +53,7 @@ if (isset($user)) {
 
                     <!-- Boutons -->
                     <div class="d-flex justify-content-around mt-5">
-                            <a href="index.php?action=edit/<?= $user['user_id'] ?>" class="btn btn-success">Modifier</a>
+                            <a href="index.php?action=edit/<?= $user['user_id'] ?>" class="btn btn-primary">Modifier</a>
                     </div>
 
                 </div>

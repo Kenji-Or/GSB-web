@@ -1,23 +1,12 @@
 <?php
 include(BASE_PATH . '/app/Views/layouts/header.php');
-if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
+if (isset($_SESSION['role']) && ($_SESSION['role'] === 1 || $_SESSION['role'] === 2)) {
 ?>
 <div class="container my-5 flex-grow-1">
     <!-- Titre de la page -->
     <div class="text-center p-4 rounded bg-light shadow">
         <h1 class="mb-0">Création d'un article</h1>
     </div>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
     <div class="card mt-4 shadow-sm">
         <div class="card-body">
             <form action="index.php?action=creatingarticle" method="POST" enctype="multipart/form-data">

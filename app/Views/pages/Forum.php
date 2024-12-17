@@ -6,17 +6,6 @@ include (BASE_PATH . '/App/Views/layouts/header.php');
     <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
         <h1 class="display-4">Forum</h1>
     </div>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
 
     <?php if ($_SESSION['role'] === 1 || $_SESSION['role'] === 2) { ?>
         <!-- Bouton Ajouter Utilisateur -->

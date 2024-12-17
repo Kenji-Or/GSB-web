@@ -6,18 +6,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 3) {
     <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
         <h1 class="display-4">Créer une nouvelle discussion</h1>
     </div>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
-
     <form action="index.php?action=creatingforum" method="POST">
         <div class="form-group">
             <label for="titre">Titre du Sujet</label>

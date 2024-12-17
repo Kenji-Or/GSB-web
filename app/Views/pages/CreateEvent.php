@@ -6,17 +6,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 3) {
     <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
         <h1 class="display-4">Créer un nouvel évènement</h1>
     </div>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
     <form action="index.php?action=creatingevent" method="POST">
         <div class="mb-3">
             <label for="titre" class="form-label">Nom de l'évènement</label>
@@ -39,6 +28,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] !== 3) {
             <input type="text" class="form-control" id="lieu" name="lieu" placeholder="Entrez une ville" required>
         </div>
         <button type="submit" class="btn btn-primary">Créer l'évènement</button>
+        <a href="index.php?action=listEvent" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 

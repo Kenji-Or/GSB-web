@@ -7,18 +7,6 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
         <h1 class="display-4">Documents</h1>
     </div>
 
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
-
     <!-- Formulaire de recherche -->
     <form action="index.php?action=searchdocument" method="post" class="d-flex justify-content-center mb-4">
         <div class="input-group w-50">

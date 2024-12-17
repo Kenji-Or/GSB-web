@@ -14,17 +14,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
     <div class="d-flex justify-content-end mb-3 mt-3">
         <a href="index.php?action=createUser"><button class="btn btn-success">Ajouter un utilisateur</button></a>
     </div>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
     <!-- Tableau des utilisateurs -->
     <?php if (isset($users) && count($users) > 0): ?>
     <table class="table table-striped table-bordered">

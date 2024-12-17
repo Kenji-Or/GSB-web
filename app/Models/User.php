@@ -31,7 +31,7 @@ class User
     public static function findById($user_id)
     {
         $db = self::getDBConnection();
-        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE user_id = :user_id");
+        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE user_id = :user_id AND status = 'actif'");
         $stmt->bindValue(":user_id", $user_id);
         $stmt->execute();
 
@@ -43,7 +43,7 @@ class User
     {
         $db = self::getDBConnection();
 
-        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role");
+        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE status = 'actif'");
         $stmt->execute();
 
         $db= null;
@@ -74,7 +74,7 @@ class User
             $set_clause = implode(", ", $fields);
 
             // Ajouter la condition WHERE
-            $query = $db->prepare("UPDATE users SET $set_clause WHERE user_id = :user_id");
+            $query = $db->prepare("UPDATE users SET $set_clause WHERE user_id = :user_id AND status = 'actif'");
 
             // Lier les paramètres
             foreach ($params as $key => $value) {
@@ -93,7 +93,7 @@ class User
 
     public static function updatePassword($userId, $password) {
         $db = self::getDBConnection();
-        $stmt = $db->prepare('UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id');
+        $stmt = $db->prepare("UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id AND status = 'actif'");
         $stmt->execute([
             'password_hash' => password_hash($password, PASSWORD_BCRYPT),
             'user_id' => $userId
@@ -108,13 +108,18 @@ class User
         $db = null;
     }
 
-    public static function verifyToken($tekon)
+    public static function verifyToken($token)
     {
+        if (empty($token)) {
+            return false; // Pas de token, donc invalide
+        }
         $db = self::getDBConnection();
         $stmt = $db->prepare("SELECT user_id FROM user_token WHERE token = :token AND expire_at > NOW()");
-        $stmt->execute([$tekon]);
-        $db= null;
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->execute([':token' => $token]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $db = null;
+
+        return $result ? $result['user_id'] : false;
     }
 
     public static function deleteToken($token)
@@ -129,8 +134,10 @@ class User
     public static function deletingUser($user_id)
     {
         $db = self::getDBConnection();
-        $query = $db->prepare("DELETE FROM users WHERE user_id = :user_id");
+        $query = $db->prepare("UPDATE users SET status = :status WHERE user_id = :user_id");
+        $status = 'supprimer';
         $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $query->bindParam(':status', $status, PDO::PARAM_STR);
         $query->execute();
         $db= null;
     }

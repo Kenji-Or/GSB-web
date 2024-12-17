@@ -6,17 +6,6 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
     <div class="welcome-section text-center p-4 bg-light rounded shadow mb-4">
         <h1 class="display-4">Liste des évènements à venir</h1>
     </div>
-    <!-- Affichage du message d'erreur -->
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger mt-2">
-            <?php
-            // Utilisation de htmlspecialchars pour éviter les attaques XSS
-            echo htmlspecialchars($_SESSION['error']);
-            // Supprimer le message d'erreur après l'affichage
-            unset($_SESSION['error']);
-            ?>
-        </div>
-    <?php endif; ?>
     <?php if ($_SESSION['role'] !== 3) {
         ?>
         <!-- Bouton Ajouter Utilisateur -->
@@ -50,7 +39,7 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
                     <small><?= htmlspecialchars($event['description']) ?></small><br />
                     <small>Date : <?= htmlspecialchars(date("d/m/Y H:i", strtotime($event['date_start']))) ?></small><br />
                     <small>Lieu : <?= htmlspecialchars($event['lieu']) ?></small>
-                    <?php  if ($_SESSION['role'] === 1) {?>
+                    <?php  if ($_SESSION['role'] !== 3) {?>
                         <div class="mt-3 text-end">
                             <a href="index.php?action=deleteEvent/<?= $event['id_event'] ?>"><button class="btn btn-danger">Supprimer</button></a>
                         </div>

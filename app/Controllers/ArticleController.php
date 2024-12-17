@@ -18,7 +18,7 @@ class ArticleController {
 
     public function addArticle()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['role'] === 1) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && ($_SESSION['role'] === 1 || $_SESSION['role'] === 2)) {
             // Nettoyage des entrées utilisateur
             $titre = htmlspecialchars(trim($_POST['titre'] ?? ''), ENT_QUOTES, 'UTF-8');
             $contenu = htmlspecialchars(trim($_POST['contenu'] ?? ''), ENT_QUOTES, 'UTF-8');
