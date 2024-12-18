@@ -113,17 +113,37 @@ class User
 
     public static function verifyToken($token)
     {
+        self::deleteExpiredTokens();
         if (empty($token)) {
             return false; // Pas de token, donc invalide
         }
         $db = self::getDBConnection();
-        $stmt = $db->prepare("SELECT user_id FROM user_token WHERE token = :token AND expire_at > NOW()");
+        $stmt = $db->prepare("SELECT user_id, expire_at FROM user_token WHERE token = :token AND expire_at > NOW()");
         $stmt->bindValue(':token', $token, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $db = null;
 
-        return $result ? $result['user_id'] : false;
+        if ($result) {
+            $expireAt = strtotime($result['expire_at']);
+            $currentTime = time();
+            // Si le token a moins de 30 minutes d'expiration, on le prolonge
+            if ($expireAt - $currentTime < 1800) { // 30 minutes
+                self::incrementExpiredTokens($token);
+            }
+            return $result['user_id'];
+        } else {
+            return false;
+        }
+    }
+
+    private static function incrementExpiredTokens($token)
+    {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("UPDATE user_token SET expire_at = DATE_ADD(expire_at, INTERVAL 1 HOUR) WHERE token = :token");
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->execute();
+        $db = null;
     }
 
     public static function incrementLoginAttempts($email) {
@@ -149,6 +169,16 @@ class User
         $stmt = $db->prepare("UPDATE users SET blocked_until = :blocked_until WHERE email = :email");
         $stmt->bindParam(':blocked_until', $block_until, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $db = null;
+    }
+
+    private static function deleteExpiredTokens() {
+        $db = self::getDBConnection();
+        date_default_timezone_set('Europe/Paris');
+        $currentTime = date('Y-m-d H:i:s');
+        $stmt = $db->prepare("DELETE FROM user_token WHERE expire_at < :currentTime");
+        $stmt->bindValue(':currentTime', $currentTime, PDO::PARAM_INT);
         $stmt->execute();
         $db = null;
     }

@@ -24,6 +24,6 @@ $dotenv->load();
         $pdo = new PDO($dsn, $db_user, $db_pass, $options);
         return $pdo;
     } catch (PDOException $e) {
-        throw new \PDOException('Erreur de connexion a la bd : ' . $e->getMessage());
+        throw new \PDOException('Erreur de connexion a la bdd : ' . $e->getMessage());
     }
 
