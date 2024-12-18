@@ -31,7 +31,7 @@ class User
     public static function findById($user_id)
     {
         $db = self::getDBConnection();
-        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE user_id = :user_id AND status = 'actif'");
+        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE user_id = :user_id AND status = 'active'");
         $stmt->bindValue(":user_id", $user_id);
         $stmt->execute();
 
@@ -43,7 +43,7 @@ class User
     {
         $db = self::getDBConnection();
 
-        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE status = 'actif'");
+        $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE status = 'active'");
         $stmt->execute();
 
         $db= null;
@@ -74,7 +74,7 @@ class User
             $set_clause = implode(", ", $fields);
 
             // Ajouter la condition WHERE
-            $query = $db->prepare("UPDATE users SET $set_clause WHERE user_id = :user_id AND status = 'actif'");
+            $query = $db->prepare("UPDATE users SET $set_clause WHERE user_id = :user_id AND status = 'active'");
 
             // Lier les paramètres
             foreach ($params as $key => $value) {
@@ -93,7 +93,7 @@ class User
 
     public static function updatePassword($userId, $password) {
         $db = self::getDBConnection();
-        $stmt = $db->prepare("UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id AND status = 'actif'");
+        $stmt = $db->prepare("UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id AND status = 'active'");
         $stmt->execute([
             'password_hash' => password_hash($password, PASSWORD_BCRYPT),
             'user_id' => $userId
@@ -120,6 +120,29 @@ class User
         $db = null;
 
         return $result ? $result['user_id'] : false;
+    }
+
+    public static function incrementLoginAttempts($email) {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("UPDATE users SET login_attempts = login_attempts + 1 WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $db = null;
+    }
+
+    // Réinitialise le nombre de tentatives échouées
+    public static function resetLoginAttempts($email) {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("UPDATE users SET login_attempts = 0, blocked_until = NULL WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $db = null;
+    }
+
+    // Définit la date de blocage de l'utilisateur
+    public static function setBlockUntil($email, $block_until) {
+        $db = self::getDBConnection();
+        $stmt = $db->prepare("UPDATE users SET blocked_until = :blocked_until WHERE email = :email");
+        $stmt->execute(['blocked_until' => $block_until, 'email' => $email]);
+        $db = null;
     }
 
     public static function deleteToken($token)
