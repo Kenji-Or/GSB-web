@@ -12,10 +12,10 @@ class PasswordReset{
     public static function storeToken($userId, $token){
         $db = self::getDBConnection();
         $stmt = $db->prepare('DELETE FROM password_reset WHERE user_id = :user_id');
-        $stmt->execute(['user_id' => $userId]);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
 
         $stmt = $db->prepare('INSERT INTO password_reset (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)');
-
         $stmt->execute(['user_id' => $userId, 'token' => $token, 'expires_at' => date('Y-m-d H:i:s', strtotime('+1 hour'))]);
     }
 

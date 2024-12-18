@@ -32,11 +32,11 @@ class Evenement
     {
         $db = self::getDBConnection();
         $stmt= $db->prepare('INSERT INTO evenements (titre_event, date_start, date_end, description, lieu) VALUES (:titre_event, :date_start, :date_end, :description, :lieu)');
-        $stmt->BindValue(':titre_event', $titre);
-        $stmt->BindValue(':date_start', $dateStart);
-        $stmt->BindValue(':date_end', $dateEnd);
-        $stmt->BindValue(':description', $description);
-        $stmt->BindValue(':lieu', $lieu);
+        $stmt->bindParam(':titre_event', $titre, PDO::PARAM_STR);
+        $stmt->bindParam(':date_start', $dateStart, PDO::PARAM_STR);
+        $stmt->bindParam(':date_end', $dateEnd, PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':lieu', $lieu, PDO::PARAM_STR);
         $stmt->execute();
         $db = null;
         return true;
@@ -46,7 +46,8 @@ class Evenement
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare('DELETE FROM evenements WHERE id_event = :id_event');
-        $stmt->execute(['id_event' => $id]);
+        $stmt->bindParam(':id_event', $id, PDO::PARAM_INT);
+        $stmt->execute();
         $db = null;
         return true;
     }

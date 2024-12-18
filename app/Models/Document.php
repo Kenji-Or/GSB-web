@@ -10,7 +10,7 @@ class Document
         // Inclure le fichier de configuration de la base de données
         return require __DIR__ . '/../config/db.php';
     }
-    static function getAll()
+    public static function getAll()
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare('SELECT * FROM documents');
@@ -19,16 +19,17 @@ class Document
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    static function getById($id)
+    public static function getById($id)
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare('SELECT * FROM documents WHERE id_document = :id_document');
-        $stmt->execute(['id_document' => $id]);
+        $stmt->bindParam(':id_document', $id, PDO::PARAM_INT);
+        $stmt->execute();
         $db = null;
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    static function getByTitle($title)
+    public static function getByTitle($title)
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare('SELECT * FROM documents WHERE nom_document LIKE :nom_document COLLATE utf8_general_ci;');
@@ -39,7 +40,7 @@ class Document
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    static function add($title, $auteur, $path)
+    public static function add($title, $auteur, $path)
     {
         // Connexion à la base de données
         $db = self::getDBConnection();
@@ -60,11 +61,12 @@ class Document
         $db = null;
     }
 
-    static function delete($id)
+    public static function delete($id)
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare('DELETE FROM documents WHERE id_document = :id_document');
-        $stmt->execute(['id_document' => $id]);
+        $stmt->bindParam(':id_document', $id, PDO::PARAM_INT);
+        $stmt->execute();
         $db = null;
     }
 

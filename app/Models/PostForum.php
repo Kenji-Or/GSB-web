@@ -23,11 +23,11 @@ class PostForum
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare("INSERT INTO post_forum (content, forum_id, user_id, date_creation) VALUES (:content, :forum_id, :user_id, :date_creation)");
-        $stmt->bindValue(':content', $content);
-        $stmt->bindValue(':forum_id', $forumId);
-        $stmt->bindValue(':user_id', $userId);
+        $stmt->bindParam(':content', $content, PDO::PARAM_STR);
+        $stmt->bindParam(':forum_id', $forumId, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         date_default_timezone_set('Europe/Paris');
-        $stmt->bindValue(':date_creation', date("Y-m-d H:i:s"));
+        $stmt->bindParam(':date_creation', date("Y-m-d H:i:s"), PDO::PARAM_STR);
         $stmt->execute();
         return true;
     }

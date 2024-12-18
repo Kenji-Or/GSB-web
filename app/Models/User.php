@@ -20,7 +20,7 @@ class User
 
         // Préparer la requête pour chercher l'utilisateur par email
         $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindValue(":email", $email);
+        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
         $stmt->execute();
 
         $db= null;
@@ -32,7 +32,7 @@ class User
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare("SELECT users.*, role.role FROM users INNER JOIN role ON users.role_id = role.id_role WHERE user_id = :user_id AND status = 'active'");
-        $stmt->bindValue(":user_id", $user_id);
+        $stmt->bindValue(":user_id", $user_id, PDO::PARAM_INT);
         $stmt->execute();
 
         $db= null;
@@ -55,11 +55,11 @@ class User
         // Préparer la requête SQL et lier les paramètres
         $db = self::getDBConnection();
         $query = $db->prepare("INSERT INTO users (prenom, nom, email, role_id, password_hash) VALUES (:prenom, :nom, :email, :role_id, :password_hash)");
-        $query->bindParam(':email', $email);
-        $query->bindParam(':prenom', $prenom);
-        $query->bindParam(':nom', $nom);
-        $query->bindParam(':role_id', $role_id);
-        $query->bindParam(':password_hash', $password_hash);
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->bindParam(':prenom', $prenom, PDO::PARAM_STR);
+        $query->bindParam(':nom', $nom, PDO::PARAM_STR);
+        $query->bindParam(':role_id', $role_id, PDO::PARAM_INT);
+        $query->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
         $query->execute();
 
         $db= null;
@@ -80,7 +80,7 @@ class User
             foreach ($params as $key => $value) {
                 $query->bindValue($key, $value);
             }
-            $query->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+            $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
             // Exécuter la requête
             $query->execute();
@@ -94,17 +94,20 @@ class User
     public static function updatePassword($userId, $password) {
         $db = self::getDBConnection();
         $stmt = $db->prepare("UPDATE users SET password_hash = :password_hash WHERE user_id = :user_id AND status = 'active'");
-        $stmt->execute([
-            'password_hash' => password_hash($password, PASSWORD_BCRYPT),
-            'user_id' => $userId
-        ]);
+        $stmt->bindParam(':password_hash', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        $db = null;
     }
 
     public static function saveToken($userId, $token, $expireAt)
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare("INSERT INTO user_token (user_id, token, expire_at) VALUES (:user_id, :token, :expire_at)");
-        $stmt->execute([$userId, $token, $expireAt]);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->bindParam(':expire_at', $expireAt, PDO::PARAM_STR);
+        $stmt->execute();
         $db = null;
     }
 
@@ -115,7 +118,8 @@ class User
         }
         $db = self::getDBConnection();
         $stmt = $db->prepare("SELECT user_id FROM user_token WHERE token = :token AND expire_at > NOW()");
-        $stmt->execute([':token' => $token]);
+        $stmt->bindValue(':token', $token, PDO::PARAM_STR);
+        $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $db = null;
 
@@ -125,7 +129,8 @@ class User
     public static function incrementLoginAttempts($email) {
         $db = self::getDBConnection();
         $stmt = $db->prepare("UPDATE users SET login_attempts = login_attempts + 1 WHERE email = :email");
-        $stmt->execute(['email' => $email]);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
         $db = null;
     }
 
@@ -133,7 +138,8 @@ class User
     public static function resetLoginAttempts($email) {
         $db = self::getDBConnection();
         $stmt = $db->prepare("UPDATE users SET login_attempts = 0, blocked_until = NULL WHERE email = :email");
-        $stmt->execute(['email' => $email]);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
         $db = null;
     }
 
@@ -141,7 +147,9 @@ class User
     public static function setBlockUntil($email, $block_until) {
         $db = self::getDBConnection();
         $stmt = $db->prepare("UPDATE users SET blocked_until = :blocked_until WHERE email = :email");
-        $stmt->execute(['blocked_until' => $block_until, 'email' => $email]);
+        $stmt->bindParam(':blocked_until', $block_until, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
         $db = null;
     }
 
@@ -149,7 +157,8 @@ class User
     {
         $db = self::getDBConnection();
         $stmt = $db->prepare("DELETE FROM user_token WHERE token = :token");
-        $stmt->execute([$token]);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+        $stmt->execute();
         $db= null;
     }
 

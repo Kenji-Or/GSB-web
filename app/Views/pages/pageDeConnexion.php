@@ -1,3 +1,8 @@
+<?php
+if (isset($_SESSION['token'])) {
+    header('location: index.php?action=home');
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
