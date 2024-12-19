@@ -17,10 +17,10 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
                     <input type="text" class="form-control" id="titre" name="titre" placeholder="Protocole N°52" required>
                 </div>
                 <!-- Auteur -->
-                <div class="mb-3">
+                <!--<div class="mb-3">
                     <label for="auteur" class="form-label">Auteur</label>
                     <input type="text" class="form-control" id="auteur" name="auteur" placeholder="Jean Dupont" required>
-                </div>
+                </div>-->
                 <div class="mb-3">
                     <label for="file" class="form-label">Sélectionnez un fichier PDF :</label>
                     <div class="input-group">

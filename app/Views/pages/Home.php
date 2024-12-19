@@ -18,16 +18,19 @@ $role = $_SESSION['role'];
     <div class="content d-flex flex-wrap mt-4 gap-3">
         <!-- Section Actualité -->
         <?php if (isset($articles) && count($articles) > 0) { ?>
-            <div class="actualites-container p-4 bg-white rounded flex-fill text-center shadow-sm">
+            <div class="actualites-container p-4 bg-white rounded flex-fill text-center shadow-sm ">
                 <?php foreach ($articles as $index => $article) { ?>
                     <div class="actualite-item" id="article-<?php echo $index; ?>" style="display: <?php echo $index === 0 ? 'block' : 'none'; ?>; background-image: url('index.php?action=view_file&file=<?php echo htmlspecialchars($article['image']); ?>'); background-size: cover;background-position: center;height: 300px;" >
                         <a class="text-decoration-none text-dark" href="index.php?action=viewArticle/<?= $article['id_article'] ?>">
-                        <h2><?php echo htmlspecialchars($article['titre']); ?></h2>
+                            <div style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%; text-align: center;">
+                                <h2 style="background-color: rgba(255, 255, 255, 0.5); display: inline-block; border-radius: 8px; padding: 10px 20px;" class="align-items-center text-center"><?php echo htmlspecialchars($article['titre']); ?></h2>
+                            </div>
                         </a>
                     </div>
 
                 <?php } ?>
             </div>
+
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     const articles = document.querySelectorAll('.actualite-item');
@@ -48,7 +51,7 @@ $role = $_SESSION['role'];
         <?php } ?>
 
         <!-- Section Événements à venir -->
-        <div class="evenements  bg-white rounded text-center shadow-sm" ">
+        <div class="evenements  bg-white rounded text-center shadow-sm">
             <?php if (isset($events) && count($events) > 0) { ?>
                 <div class="row g-4">
                     <?php foreach ($events as $event): ?>

@@ -18,11 +18,6 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] === 1 || $_SESSION['role'] ==
                     <label for="contenu" class="form-label">Contenu</label>
                     <textarea name="contenu" id="contenu" class="form-control" rows="5" placeholder="Écrivez ici..."></textarea>
                 </div>
-                <!-- Auteur -->
-                <div class="mb-3">
-                    <label for="auteur" class="form-label">Auteur</label>
-                    <input type="text" class="form-control" id="auteur" name="auteur" placeholder="Jean Dupont" required>
-                </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Sélectionnez une image:</label>
                     <div class="input-group">

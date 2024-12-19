@@ -22,7 +22,7 @@ class ArticleController {
             // Nettoyage des entrées utilisateur
             $titre = htmlspecialchars(trim($_POST['titre'] ?? ''), ENT_QUOTES, 'UTF-8');
             $contenu = htmlspecialchars(trim($_POST['contenu'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $auteur = htmlspecialchars(trim($_POST['auteur'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $auteur = htmlspecialchars(trim($_SESSION['prenom'] . " " . $_SESSION['nom'] ?? ''), ENT_QUOTES, 'UTF-8');
             $file = $_FILES['image'] ?? null;
 
             if ($file === null) {
