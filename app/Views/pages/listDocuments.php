@@ -27,24 +27,22 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
         <div class="d-flex justify-content-end mb-3">
             <a href="index.php?action=createdocument">
                 <button class="btn btn-success">
-                    Ajouter un document
+                    <i class="bi bi-plus"></i> Ajouter un document
                 </button>
             </a>
         </div>
     <?php } ?>
-    <div class="card mt-4 shadow-sm">
-        <div class="card-body">
             <?php if (isset($documents) && count($documents) > 0): ?>
-            <table class="table table-striped table-bordered">
-                <thead class="table-light">
+            <table class="table table-bordered mt-4">
+                <thead class="table-primary text-center">
                 <tr>
-                    <th>Titre document</th>
-                    <th>Auteur</th>
-                    <th>Date</th>
-                    <th></th>
+                    <th scope="col">Titre document</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                 <?php foreach ($documents as $document): ?>
                 <tr>
                     <td><?= htmlspecialchars($document['nom_document'])?></td>
@@ -58,8 +56,6 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
             <?php else: ?>
                 <p>Aucun Document trouvé.</p>
             <?php endif; ?>
-        </div>
-    </div>
 </div>
 <?php
 include(BASE_PATH . '/app/Views/layouts/footer.php');

@@ -11,8 +11,8 @@ if (isset($user)) {
         ?>
         <div class="container my-5 flex-grow-1">
             <!-- Titre de la page -->
-            <div class="text-center p-4 rounded bg-light shadow">
-                <h1 class="mb-0">Profile</h1>
+            <div class="text-center p-4 rounded bg-light shadow mb-4">
+                <h1 class="display-4">Profile</h1>
             </div>
             <div class="card mt-4 shadow-sm">
                 <div class="card-body">

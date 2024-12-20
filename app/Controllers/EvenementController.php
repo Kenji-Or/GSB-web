@@ -54,6 +54,10 @@ class EvenementController {
             } else {
                 $_SESSION['error'] = 'Erreur lors de la suppression.';
             }
+        } else {
+            $_SESSION['error'] = "Vous n'avez pas les droits nécessaires pour supprimé un évènement.";
+            header('location: index.php?action=listEvent');
+            exit();
         }
     }
 }

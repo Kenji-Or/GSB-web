@@ -110,7 +110,7 @@ class UserController
             exit();
         } catch (\Exception $e) {
             // Gérer les erreurs générales
-            $_SESSION['error'] = "Une erreur s'est produite : " . $e->getMessage();
+            $_SESSION['error'] = "Une erreur s'est produite";
             header("Location: index.php?action=GestionAcces");
             exit();
         }

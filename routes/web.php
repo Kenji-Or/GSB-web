@@ -131,18 +131,6 @@ $routes = [
 
 $routeMatched = false;
 
-//// Liste des actions accessibles sans connexion
-//$publicActions = ['login', 'authentification', 'logout', 'passwordoublier', 'resetpassword', 'linkResetPassword', 'newpassword'];
-//
-//// Vérifie si l'action courante est publique
-//$isPublicAction = in_array($action, $publicActions);
-//
-//if (!$isPublicAction && !connected()) {
-//    // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
-//    header('Location: index.php?action=login');
-//    exit();
-//}
-
 foreach ($routes as $pattern => $callback) {
     if (!connected()) {
         $routeMatched = false;
@@ -324,10 +312,6 @@ if (!$routeMatched) {
                 header('Location: index.php?action=login');
                 exit();
             }
-            break;
-
-        case 'deleteDiscussion':
-            $forumController->deleteForum();
             break;
 
         case 'contact' :

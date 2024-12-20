@@ -73,7 +73,7 @@ if (!isset($_SESSION['nom'])) {
     </div>
 </nav>
 <?php if (isset($_SESSION['success'])): ?>
-    <div id="success-alert" class="alert alert-success mb-3 position-fixed top-0 end-0" style="max-width: 300px; z-index: 1150; margin-top: 100px;">
+    <div id="alert" class="alert alert-success mb-3 position-fixed top-0 end-0" style="max-width: 300px; z-index: 1150; margin-top: 100px;">
         <?php
         // Utilisation de htmlspecialchars pour éviter les attaques XSS
         echo htmlspecialchars($_SESSION['success']);
@@ -82,7 +82,7 @@ if (!isset($_SESSION['nom'])) {
     </div>
 <?php endif; ?>
 <?php if (isset($_SESSION['error'])): ?>
-    <div id="danger-alert" class="alert alert-danger mb-3 position-fixed top-0 end-0" style="max-width: 300px; z-index: 1150; margin-top: 100px;">
+    <div id="alert" class="alert alert-danger mb-3 position-fixed top-0 end-0" style="max-width: 300px; z-index: 1150; margin-top: 100px;">
         <?php
         // Utilisation de htmlspecialchars pour éviter les attaques XSS
         echo htmlspecialchars($_SESSION['error']);
@@ -93,18 +93,18 @@ if (!isset($_SESSION['nom'])) {
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Trouver l'alerte par son ID
-        var successAlert = document.getElementById("success-alert");
+        const alert = document.getElementById("alert");
 
         // Si l'alerte existe, configurer un délai pour la suppression
-        if (successAlert) {
+        if (alert) {
             setTimeout(function() {
                 // Appliquer une transition de disparition
-                successAlert.style.transition = "opacity 0.5s";
-                successAlert.style.opacity = "0";
+                alert.style.transition = "opacity 0.5s";
+                alert.style.opacity = "0";
 
                 // Supprimer l'élément après la transition
                 setTimeout(function() {
-                    successAlert.remove();
+                    alert.remove();
                 }, 500); // Correspond à la durée de la transition
             }, 10000); // Délai de 10 secondes
         }
