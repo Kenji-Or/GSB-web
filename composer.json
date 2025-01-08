@@ -18,5 +18,9 @@
             "robloach/component-installer": true,
             "oomphinc/composer-installers-extender": true
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "mockery/mockery": "^1.6"
     }
 }

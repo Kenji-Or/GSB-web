@@ -33,7 +33,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] === 1) {
                 <td class="text-center"><?= htmlspecialchars($user['role']) ?></td>
                 <td class="text-center">
                     <a href="index.php?action=edit/<?= $user['user_id'] ?>"><button class="btn btn-primary btn-sm me-1"><i class="bi bi-pencil"></i> Modifier</button></a>
-                    <a href="index.php?action=delete/<?= $user['user_id'] ?>"><button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</button></a>
+                    <a href="index.php?action=delete/<?= $user['user_id'] ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')"><button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Supprimer</button></a>
                 </td>
             </tr>
         <?php endforeach; ?>

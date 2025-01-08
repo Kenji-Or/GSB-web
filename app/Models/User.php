@@ -7,10 +7,17 @@ use \Exception;
 
 class User
 {
+    private static $dbConnection; // Nouvelle propriété pour stocker la connexion
     private static function getDBConnection()
     {
         // Inclure le fichier de configuration de la base de données
         return require __DIR__ . '/../config/db.php';
+    }
+
+    // Méthode pour injecter une connexion personnalisée (pour les tests)
+    public static function setDBConnection($connection)
+    {
+        self::$dbConnection = $connection;
     }
 
     public static function findByEmail($email)
