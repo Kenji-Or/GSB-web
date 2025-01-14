@@ -14,7 +14,7 @@ class Article {
     public static function getArticles()
     {
         $db = self::getDBConnection();
-        $query = "SELECT * FROM articles ORDER BY date_publication";
+        $query = "SELECT articles.*, users.prenom, users.nom FROM articles JOIN users ON articles.auteur = users.user_id ORDER BY date_publication";
         $stmt = $db->prepare($query);
         $stmt->execute();
         $db = null;
@@ -24,7 +24,7 @@ class Article {
     public static function getLastArticle()
     {
         $db = self::getDBConnection();
-        $query = "SELECT * FROM articles ORDER BY date_publication DESC LIMIT 3";
+        $query = "SELECT articles.*, users.prenom, users.nom FROM articles JOIN users ON articles.auteur = users.user_id ORDER BY date_publication DESC LIMIT 3";
         $stmt = $db->prepare($query);
         $stmt->execute();
         $db = null;
@@ -33,7 +33,7 @@ class Article {
 
     public static function getArticleById($id) {
         $db = self::getDBConnection();
-        $query = "SELECT * FROM articles WHERE id_article = :id_article";
+        $query = "SELECT articles.*, users.prenom, users.nom FROM articles JOIN users ON articles.auteur = users.user_id WHERE id_article = :id_article";
         $stmt = $db->prepare($query);
         $stmt->bindValue(':id_article', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -47,7 +47,7 @@ class Article {
         $stmt = $db->prepare("INSERT INTO articles (titre, contenu, auteur, image, date_publication) VALUES (:titre, :contenu, :auteur, :image, :date_publication)");
         $stmt->bindValue(':titre', $titre, PDO::PARAM_STR);
         $stmt->bindValue(':contenu', $contenu, PDO::PARAM_STR);
-        $stmt->bindValue(':auteur', $auteur, PDO::PARAM_STR);
+        $stmt->bindValue(':auteur', $auteur, PDO::PARAM_INT);
         $stmt->bindValue(':image', $image, PDO::PARAM_STR);
         $stmt->bindValue(':date_publication', date('Y-m-d'), PDO::PARAM_STR);
         $stmt->execute();

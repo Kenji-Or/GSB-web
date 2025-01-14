@@ -27,7 +27,7 @@ class DocumentController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['role'] === 1) {
             // Nettoyage des entrées utilisateur
             $titre = htmlspecialchars(trim($_POST['titre'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $auteur = htmlspecialchars(trim($_SESSION['prenom'] . " " . $_SESSION['nom'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $auteur = htmlspecialchars(trim($_SESSION['user_id'] ?? ''), ENT_QUOTES, 'UTF-8');
             $file = $_FILES['file'] ?? null;
 
             if ($file === null) {

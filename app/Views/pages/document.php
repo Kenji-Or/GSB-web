@@ -15,7 +15,7 @@ if (isset($document) && $document['document_pdf']):
     <div class="document-meta text-center mt-4">
         <p class="text-muted mb-1">
             <strong>Auteur : </strong>
-            <span><?= htmlspecialchars($document['auteur']) ?></span>
+            <span><?= htmlspecialchars($document['prenom'] . " " . $document['nom']) ?></span>
         </p>
         <p class="text-muted">
             <strong>Date de publication : </strong>

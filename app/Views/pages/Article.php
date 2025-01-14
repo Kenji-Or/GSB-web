@@ -15,7 +15,7 @@ if (isset($article)) {
             <!-- Informations de l'article -->
             <div class="text-center text-muted mt-4">
                 <p class="mb-1">
-                    Par <strong><?= htmlspecialchars($article['auteur']) ?></strong>
+                    Par <strong><?= htmlspecialchars($article['prenom'] . " " . $article['nom']) ?></strong>
                 </p>
                 <p class="mb-0">Publié le <?= htmlspecialchars($article['date_publication']) ?></p>
             </div>

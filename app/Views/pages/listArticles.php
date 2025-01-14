@@ -33,7 +33,7 @@ include(BASE_PATH . 'app/Views/layouts/header.php');
                             <p class="card-text"><?= htmlspecialchars(substr($article['contenu'], 0, 200)) ?>...</p>
                         </div>
                         <div class="card-footer text-muted">
-                            <p>Ecrit par: <?= htmlspecialchars($article['auteur']) ?></p>
+                            <p>Ecrit par: <?= htmlspecialchars($article['prenom'] . " " . $article['nom']) ?></p>
                             <p>Publié le <?= htmlspecialchars($article['date_publication']) ?></p>
                         </div>
                     </div>

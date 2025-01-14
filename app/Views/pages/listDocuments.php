@@ -46,7 +46,7 @@ include(BASE_PATH . '/app/Views/layouts/header.php');
                 <?php foreach ($documents as $document): ?>
                 <tr>
                     <td><?= htmlspecialchars($document['nom_document'])?></td>
-                    <td><?= htmlspecialchars($document['auteur'])?></td>
+                    <td><?= htmlspecialchars($document['prenom'] . " " . $document['nom'])?></td>
                     <td><?= htmlspecialchars(date("d/m/Y", strtotime($document['date_creation']))) ?></td>
                     <td><a href="index.php?action=document/<?= $document['id_document'] ?>"><button class="btn btn-primary btn-sm me-1">Détail</button></a></td>
                 </tr>

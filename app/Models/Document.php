@@ -13,7 +13,7 @@ class Document
     public static function getAll()
     {
         $db = self::getDBConnection();
-        $stmt = $db->prepare('SELECT * FROM documents');
+        $stmt = $db->prepare('SELECT documents.*, users.prenom, users.nom FROM documents JOIN users ON documents.auteur = users.user_id');
         $stmt->execute();
         $db=null;
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -22,7 +22,7 @@ class Document
     public static function getById($id)
     {
         $db = self::getDBConnection();
-        $stmt = $db->prepare('SELECT * FROM documents WHERE id_document = :id_document');
+        $stmt = $db->prepare('SELECT documents.*, users.prenom, users.nom FROM documents JOIN users ON documents.auteur = users.user_id WHERE id_document = :id_document');
         $stmt->bindParam(':id_document', $id, PDO::PARAM_INT);
         $stmt->execute();
         $db = null;
@@ -32,7 +32,7 @@ class Document
     public static function getByTitle($title)
     {
         $db = self::getDBConnection();
-        $stmt = $db->prepare('SELECT * FROM documents WHERE nom_document LIKE :nom_document COLLATE utf8_general_ci;');
+        $stmt = $db->prepare('SELECT documents.*, users.prenom, users.nom FROM documents JOIN users ON documents.auteur = users.user_id WHERE nom_document LIKE :nom_document COLLATE utf8_general_ci;');
         // Utilisation de LIKE pour une recherche partielle
         $stmt->bindValue(':nom_document', '%' . $title . '%', PDO::PARAM_STR);
         $stmt->execute();
@@ -50,7 +50,7 @@ class Document
 
         // Lier les valeurs aux paramètres de la requête préparée
         $stmt->bindValue(':nom_document', $title, PDO::PARAM_STR);  // Lier le titre du document
-        $stmt->bindValue(':auteur', $auteur, PDO::PARAM_STR);        // Lier l'auteur du document
+        $stmt->bindValue(':auteur', $auteur, PDO::PARAM_INT);        // Lier l'auteur du document
         $stmt->bindValue(':date_creation', date('Y-m-d'), PDO::PARAM_STR);  // Lier la date actuelle de création
         $stmt->bindValue(':document_pdf', $path, PDO::PARAM_STR);     // Lier le chemin du fichier PDF
 
