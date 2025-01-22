@@ -184,10 +184,15 @@ class UserController
     {
         try {
             // Vérifier si l'utilisateur connecté a le rôle 'admin' (role_id = 1)
-            $current_user_role_id = $_SESSION['role'] ?? null; // Supposons que le rôle est stocké dans la session.
+            $current_user_role_id = $_SESSION['role'] ?? null;
             if ($current_user_role_id !== 1) {
                 $_SESSION['error'] = "Vous n'avez pas les droits nécessaires pour supprimé un utilisateur.";
                 header("Location: index.php?action=GestionAcces");
+                exit();
+            }
+            if ($_SESSION['user_id'] === $user_id) {
+                $_SESSION['error'] = "Vous ne pouvez pas supprimer votre compte";
+                header("Location: index.php?action=home");
                 exit();
             }
             User::deletingUser($user_id);
