@@ -1,6 +1,6 @@
 <?php
 include(BASE_PATH . '/app/Views/layouts/header.php');
-if (isset($article)) {
+if (isset($article) && $article !== false) {
 ?>
     <div class="container my-3 flex-grow-1">
         <!-- Titre de la page -->

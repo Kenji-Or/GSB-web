@@ -46,20 +46,19 @@
             <!-- Condition 2 -->
             <div class="col-lg-6">
                 <div class="p-4 bg-light border rounded-3 shadow-sm">
-                    <h5 class="fw-bold text-primary mb-3">2. Hébergement</h5>
-                    <ul class="text-secondary">
-                        <li>Nom de l'hébergeur : [Nom de l'hébergeur]</li>
-                        <li>Adresse : [Adresse complète de l'hébergeur]</li>
-                    </ul>
+                    <h5 class="fw-bold text-primary mb-3">2. Propriété intellectuelle</h5>
+                    <p class="text-secondary">
+                        Tous les contenus présents sur l'Intranet (textes, images, vidéos, documents, etc.) sont la propriété exclusive de GSB ou de leurs auteurs respectifs. Toute reproduction ou distribution non autorisée est interdite.
+                    </p>
                 </div>
             </div>
 
             <!-- Condition 3 -->
             <div class="col-lg-6">
                 <div class="p-4 bg-light border rounded-3 shadow-sm">
-                    <h5 class="fw-bold text-primary mb-3">3. Propriété intellectuelle</h5>
+                    <h5 class="fw-bold text-primary mb-3">3. Limitation de responsabilité</h5>
                     <p class="text-secondary">
-                        Tous les contenus présents sur l'Intranet (textes, images, vidéos, documents, etc.) sont la propriété exclusive de GSB ou de leurs auteurs respectifs. Toute reproduction ou distribution non autorisée est interdite.
+                        GSB ne saurait être tenu responsable des dommages directs ou indirects résultant de l'utilisation de l'Intranet, y compris la perte de données ou les interruptions de service.
                     </p>
                 </div>
             </div>
@@ -67,9 +66,9 @@
             <!-- Condition 4 -->
             <div class="col-lg-6">
                 <div class="p-4 bg-light border rounded-3 shadow-sm">
-                    <h5 class="fw-bold text-primary mb-3">4. Limitation de responsabilité</h5>
+                    <h5 class="fw-bold text-primary mb-3">4. Loi applicable</h5>
                     <p class="text-secondary">
-                        GSB ne saurait être tenu responsable des dommages directs ou indirects résultant de l'utilisation de l'Intranet, y compris la perte de données ou les interruptions de service.
+                        L'utilisation de l'Intranet est soumise aux lois françaises. En cas de litige, les tribunaux seront compétents.
                     </p>
                 </div>
             </div>
@@ -77,17 +76,7 @@
             <!-- Condition 5 -->
             <div class="col-lg-6">
                 <div class="p-4 bg-light border rounded-3 shadow-sm">
-                    <h5 class="fw-bold text-primary mb-3">5. Loi applicable</h5>
-                    <p class="text-secondary">
-                        L'utilisation de l'Intranet est soumise aux lois françaises. En cas de litige, les tribunaux seront compétents.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Condition 6 -->
-            <div class="col-lg-6">
-                <div class="p-4 bg-light border rounded-3 shadow-sm">
-                    <h5 class="fw-bold text-primary mb-3">6. Contact</h5>
+                    <h5 class="fw-bold text-primary mb-3">5. Contact</h5>
                     <p class="text-secondary">
                         Pour toute question ou réclamation concernant l'Intranet, contactez-nous via la page "Contact" ou à l'adresse suivante : kenjiogier@gmail.com.
                     </p>

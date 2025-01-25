@@ -1,6 +1,7 @@
 <?php
 include(BASE_PATH . '/app/Views/layouts/header.php');
-if (isset($document) && $document['document_pdf']):
+if (isset($document) && $document !== false):
+    if ($document['document_pdf']) {
     $pdfPath = htmlspecialchars($document['document_pdf']);
 ?>
 <div class="container my-3 flex-grow-1">
@@ -31,9 +32,18 @@ if (isset($document) && $document['document_pdf']):
     <?php } ?>
 </div>
 
-<?php
-else: ?>
-    <p class="text-center">Document introuvable.</p>
+<?php } else { ?>
+        <p class="text-center">Document introuvable.</p>
+    <?php
+    }
+ else: ?>
+     <div class="text-center">
+         <div class="error-message">
+             <h2 class="mb-4">Oups! La page que vous recherchez est introuvable.</h2>
+             <p>Il semble que la page que vous cherchez n'existe pas. Essayez de revenir à la page d'accueil.</p>
+             <a href="index.php?action=home" class="btn btn-primary">Retour à l'accueil</a>
+         </div>
+     </div>
 <?php endif;
 
 include(BASE_PATH . '/app/Views/layouts/footer.php');

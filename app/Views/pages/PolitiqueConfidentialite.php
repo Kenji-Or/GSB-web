@@ -88,16 +88,6 @@
                     </p>
                 </div>
             </div>
-
-            <!-- Condition 7 -->
-            <div class="col-lg-6">
-                <div class="p-4 bg-light border rounded-3 shadow-sm">
-                    <h5 class="fw-bold text-primary mb-3">7. Partage des données</h5>
-                    <p class="text-secondary">
-                        Les données ne sont partagées qu'avec des partenaires contractuels dans le cadre de besoins strictement définis et avec votre consentement préalable.
-                    </p>
-                </div>
-            </div>
         </div>
     </main>
 </div>

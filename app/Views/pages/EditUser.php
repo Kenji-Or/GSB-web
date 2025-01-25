@@ -1,7 +1,7 @@
 <?php
 include(BASE_PATH . '/app/Views/layouts/header.php');
 
-if (isset($user)) {
+if (isset($user) && $user !== false) {
     function hasAccess($user) {
         return isset($_SESSION['role']) && $_SESSION['role'] === 1
             || isset($_SESSION['user_id']) && $user['user_id'] === $_SESSION['user_id'];
@@ -102,6 +102,16 @@ if (isset($user)) {
         <?php
     }
         include(BASE_PATH . '/app/Views/layouts/footer.php');
+} else {
+    ?>
+    <div class="text-center">
+        <div class="error-message">
+            <h2 class="mb-4">Oups! La page que vous recherchez est introuvable.</h2>
+            <p>Il semble que la page que vous cherchez n'existe pas. Essayez de revenir à la page d'accueil.</p>
+            <a href="index.php?action=home" class="btn btn-primary">Retour à l'accueil</a>
+        </div>
+    </div>
+    <?php
 }
 ?>
 
