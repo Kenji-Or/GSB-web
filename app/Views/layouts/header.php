@@ -17,7 +17,7 @@ if (!isset($_SESSION['nom'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .bg-navbar {
-            background-color: #7298C8;
+            background-color:#3a77a8 ;
         }
     </style>
 </head>
