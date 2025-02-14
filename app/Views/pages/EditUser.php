@@ -39,7 +39,7 @@ if (isset($user) && $user !== false) {
                         <div class="mb-3">
                             <?php if (isset($roles)): ?>
                                 <label for="role" class="form-label">Rôle</label>
-                                <select id="role" name="role_id" class="form-select" <?= ($user['role_id'] == 2 || $user['role_id'] == 3) && $_SESSION['role'] != 1 ? 'disabled' : '' ?> required>
+                                <select id="role" name="role_id" class="form-select" <?= (($user['role_id'] == 2 || $user['role_id'] == 3) && $_SESSION['role'] != 1) || ($user['user_id'] === $_SESSION['user_id']) ? 'disabled' : '' ?> required>
                                     <?php foreach ($roles as $role): ?>
                                         <option value="<?= $role['id_role'] ?>" <?= $user['role_id'] == $role['id_role'] ? 'selected' : '' ?>>
                                             <?= htmlspecialchars($role['role']) ?>

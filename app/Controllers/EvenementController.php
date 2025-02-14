@@ -14,15 +14,16 @@ class EvenementController {
 
     public function createEvenement() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_SESSION['role'] !== 3) {
-            $titre = htmlspecialchars(trim($_POST['titre'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $description = htmlspecialchars(trim($_POST['description'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $dateStart = htmlspecialchars(trim($_POST['dateStart'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $dateEnd = htmlspecialchars(trim($_POST['dateEnd'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $lieu = htmlspecialchars(trim($_POST['lieu'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $titre = trim($_POST['titre'] ?? '');
+            $description = trim($_POST['description'] ?? '');
+            $dateStart = trim($_POST['dateStart'] ?? '');
+            $dateEnd = trim($_POST['dateEnd'] ?? '');
+            $lieu = trim($_POST['lieu'] ?? '');
+            $user_id = trim($_SESSION['user_id'] ?? '');
 
             $current_time = date('Y-m-d H:i:s'); // Date et heure actuelles au format MySQL
 
-            if (empty($titre) || empty($description) || empty($dateStart) || empty($dateEnd) || empty($lieu)) {
+            if (empty($titre) || empty($description) || empty($dateStart) || empty($dateEnd) || empty($lieu) || empty($user_id)) {
                 $_SESSION['error'] = "Veuillez remplir tous les champs";
                 header('location: index.php?action=createEvent');
                 exit();
@@ -35,7 +36,7 @@ class EvenementController {
                 exit();
             }
 
-            $event = Evenement::addEvent($titre, $description, $dateStart, $dateEnd, $lieu);
+            $event = Evenement::addEvent($titre, $description, $dateStart, $dateEnd, $lieu, $user_id);
             $event === true ? $_SESSION['success'] = 'Evènement ajouté avec succès.' : $_SESSION['error'] = 'Erreur lors de l\'ajout de l\'evenement.';
             header('location: index.php?action=listEvent');
             exit();

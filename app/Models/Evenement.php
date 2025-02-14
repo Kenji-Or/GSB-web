@@ -28,15 +28,16 @@ class Evenement
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function addEvent($titre, $description, $dateStart, $dateEnd, $lieu)
+    public static function addEvent($titre, $description, $dateStart, $dateEnd, $lieu, $user_id)
     {
         $db = self::getDBConnection();
-        $stmt= $db->prepare('INSERT INTO evenements (titre_event, date_start, date_end, description, lieu) VALUES (:titre_event, :date_start, :date_end, :description, :lieu)');
+        $stmt= $db->prepare('INSERT INTO evenements (titre_event, date_start, date_end, description, lieu, user_id) VALUES (:titre_event, :date_start, :date_end, :description, :lieu, :user_id)');
         $stmt->bindParam(':titre_event', $titre, PDO::PARAM_STR);
         $stmt->bindParam(':date_start', $dateStart, PDO::PARAM_STR);
         $stmt->bindParam(':date_end', $dateEnd, PDO::PARAM_STR);
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':lieu', $lieu, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
         $db = null;
         return true;
