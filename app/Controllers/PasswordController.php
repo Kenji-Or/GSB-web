@@ -34,7 +34,7 @@ class PasswordController {
         $token = bin2hex(random_bytes(32));
         PasswordReset::storeToken($user['user_id'], $token);
 
-        $resetLink = "http://gsb.local/index.php?action=linkResetPassword&token=$token";
+        $resetLink = "http://localhost/MonProjetWeb/public/index.php?action=linkResetPassword&token=$token";
         $prenom = $user['prenom'];
         // Envoi de l'e-mail
         $mail = new PHPMailer(true);
@@ -112,7 +112,7 @@ class PasswordController {
         }
 
         // Mettre à jour le mot de passe de l'utilisateur
-        User::updatePassword($resetEntry['user_id'], $newPassword);
+        User::updatePassword($resetEntry['user_id'], password_hash($newPassword, PASSWORD_DEFAULT));
 
         // Supprimer le jeton utilisé
         PasswordReset::deleteToken($resetEntry['user_id']);

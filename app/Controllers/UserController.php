@@ -90,9 +90,9 @@ class UserController
                     <li><strong>Mot de passe :</strong> $motDePasse</li>
                 </ul>
                 <p>Veuillez vous connecter et modifier votre mot de passe dès que possible.</p>
-                <p><a href='http://gsb.local/index.php?action=login'>Accédez à votre compte</a></p>
+                <p><a href='http://localhost/MonProjetWeb/public/index.php?action=login'>Accédez à votre compte</a></p>
                 <p>Cordialement,</p>
-                <p>L'équipe de support GSB</p>";
+                <p>L\'equipe de support GSB</p>";
 
                     // Envoyer l'e-mail
                     $mail->send();
@@ -136,7 +136,7 @@ class UserController
                 }
 
                 // Vérifier si l'utilisateur connecté a le rôle 'admin' (role_id = 1)
-                $current_user_role_id = $_SESSION['role'] ?? null; // Supposons que le rôle est stocké dans la session.
+                $current_user_role_id = $_SESSION['role'] ?? null; // le rôle est stocké dans la session.
 
                 // Construire dynamiquement les champs à mettre à jour
                 $fields = [
