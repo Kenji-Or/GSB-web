@@ -1,77 +1,66 @@
-# Intranet GSB  
+# 🌐 Portail Intranet - GSB   
 
 **Créé par :** Kenji Ogier  
-**Date :** 19/12/2024  
+**Date :** 31/12/2024  
 
-## Description  
-L'intranet GSB est une plateforme destinée à faciliter la communication, la gestion documentaire et la coordination entre les collaborateurs du groupe. Ce guide couvre les principales fonctionnalités accessibles selon les droits des utilisateurs : standard, manager ou administrateur.  
+## 📌 Description  
+Le projet **GSB Intranet** est une plateforme interne développée pour le laboratoire **Galaxy Swiss Bourdin (GSB)**.  
+Elle permet aux employés d’accéder à des documents, d’échanger via un forum, de suivre des actualités et événements, et d’optimiser la communication interne.  
 
----
+## 🚀 Fonctionnalités principales  
+✔️ **Gestion des utilisateurs** (rôles : utilisateur, manager, administrateur)  
+✔️ **Consultation et gestion de documents** (protocoles médicaux, formations)  
+✔️ **Actualités et articles**  
+✔️ **Calendrier des événements internes**  
+✔️ **Forum de discussion**  
+✔️ **Gestion des profils utilisateurs**  
+✔️ **Système de contact et assistance**  
 
-## Fonctionnalités  
+## 🛠️ Installation  
 
-### Fonctionnalités principales :  
-- **Authentification sécurisée** : Chaque utilisateur doit se connecter avec un identifiant pour accéder à l'intranet.  
-- **Barre de navigation intuitive** : Accédez rapidement à toutes les sections disponibles.  
+### 1️⃣ Prérequis  
+Avant d’installer le projet, assure-toi d’avoir :  
+- **PHP 8+**, **MySQL** et **Apache/Nginx**  
+- **Composer** et **Node.js (avec npm)**  
+- **Git** (pour cloner le repo)  
 
-### En tant qu’utilisateur standard (user) :  
-- Accédez aux **documents** (protocoles et formations médicales).  
-- Consultez les **actualités et événements** liés au domaine pharmaceutique.  
-- Participez aux discussions dans les **forums**.  
-- Contactez un administrateur via la page **Contact** en cas de problème.  
-- Gérez votre **profil utilisateur** : modifiez vos informations personnelles, consultez les mentions légales, et déconnectez-vous.  
+### 2️⃣ Clonage du projet  
+```sh
+git clone https://github.com/Kenji-Or/GSB-web.git
+cd GSB-web
+```
 
-### En tant que manager :  
-- Créez et supprimez des **articles**.  
-- Créez des **sujets de discussion** dans les forums et gérez vos propres publications.  
-- Créez et supprimez des **événements**.  
+### 3️⃣ Installation des dépendances
+```sh
+composer install
+npm install
+```
 
-### En tant qu’administrateur (admin) :  
-- Accédez à toutes les fonctionnalités des managers.  
-- Créez et supprimez des **documents**.  
-- Gérez les **utilisateurs** : création, modification et suppression de comptes.  
+### 4️⃣ Configuration
+Renomme le fichier .env.example en .env et configure la base de données et le service smtp :
+```sh
+DB_HOST=localhost
+DB_DATABASE=gsb_intranet
+DB_USERNAME=root
+DB_PASSWORD=<yourpassword>
+SMTP_HOST=<your smtp>
+SMTP_PORT=<your port>
+SMTP_USER=<your mail>
+SMTP_PASSWORD=<your password>
+SMTP_SECURE=ssl
+```
 
----
+### 5️⃣ Importation de la base de données
+Le fichier de la base de données (gsb_intranet.sql) est inclus dans le repo. Importe-le via :
+```sh
+mysql -u root -p gsb_intranet < database/gsb_intranet.sql
+```
 
-## Prérequis  
-Ajoutez ici les informations concernant les prérequis nécessaires pour utiliser l'application, par exemple :   
-- **PHP** : Version 8.0 ou supérieure  
-- **Base de données** : MySQL
-- **Composer** : Gestionnaire de dépendances PHP  
-- **Bibliothèques nécessaires** :  
-  - PHPMailer  
-  - FullCalendar  
-  - Autoload  
-
----
-
-## Installation  
-Ajoutez les étapes pour installer et configurer l'application :  
-1. Clonez ce dépôt :  
-   ```bash
-   git clone <URL_du_dépôt>
-2. Installer les dépendance:
-   ```bash
-   composer install
-3. Configurez votre fichier `.env` :  
-   - Ajoutez vos paramètres de base de données, SMTP, etc.
-    - SMTP_HOST=smtp.mailtrap.io
-    - SMTP_PORT=2525
-    - SMTP_USER=null
-    - SMTP_PASSWORD=null
-    - SMTP_SECURE=null
-    - DB_HOST=127.0.0.1
-    - DB_NAME="gsb"
-    - DB_USER="root"
-    - DB_PASS="password"
-5. Configurez votre base de données :  
-   - Créez une nouvelle base de données MySQL.  
-   - Ajoutez manuellement les tables nécessaires en vous basant sur les migrations ou sur le fichier `README`.  
-6. Lancez les migrations pour initialiser les tables :  
-   ```bash
-   php artisan migrate
-7. Lancez le serveur local :
-   php -S localhost:8000
+### 6️⃣ Lancer le serveur
+```sh
+php artisan serve
+```
+L’application sera disponible sur http://localhost:8000 🎉
 
 ---
 
