@@ -62,10 +62,14 @@ php artisan serve
 ```
 L’application sera disponible sur http://localhost:8000 🎉
 
----
-
-## Utilisation  
-1. Accédez à l'application via votre navigateur à l'adresse suivante :
-   http://localhost:8000
-2. Connectez-vous avec vos identifiants.  
-3. Naviguez dans les différentes sections via la barre de navigation.
+### 📂 Arborescence du projet
+```sh
+📁 GSB-web  
+ ┣ 📁 app              
+ ┣ 📁 database        # Fichier SQL de la BDD  
+ ┣ 📁 public          # Fichiers publics  
+ ┣ 📁 components      # Bibliotèque callendar
+ ┣ 📁 routes          # Routes web   
+ ┣ 📄 .env.example    # Fichier de configuration  
+ ┣ 📄 README.md       # Documentation du projet
+```
