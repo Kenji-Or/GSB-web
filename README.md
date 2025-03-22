@@ -41,8 +41,8 @@ Renomme le fichier .env.example en .env et configure la base de données et le s
 ```sh
 DB_HOST=localhost
 DB_NAME=gsb
-DB_USERNAME=root
-DB_PASSWORD=<yourpassword>
+DB_USER=root
+DB_PASS=<yourpassword>
 SMTP_HOST=<your smtp>
 SMTP_PORT=<your port>
 SMTP_USER=<your mail>
