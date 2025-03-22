@@ -40,20 +40,21 @@ npm install
 Renomme le fichier .env.example en .env et configure la base de données et le service smtp :
 ```sh
 DB_HOST=localhost
-DB_DATABASE=gsb_intranet
+DB_NAME=gsb
 DB_USERNAME=root
 DB_PASSWORD=<yourpassword>
 SMTP_HOST=<your smtp>
 SMTP_PORT=<your port>
 SMTP_USER=<your mail>
 SMTP_PASSWORD=<your password>
-SMTP_SECURE=ssl
+SMTP_SECURE=
 ```
 
 ### 5️⃣ Importation de la base de données
 Le fichier de la base de données (gsb_intranet.sql) est inclus dans le repo. Importe-le via :
 ```sh
-mysql -u root -p gsb_intranet < database/gsb_intranet.sql
+mysql -u root -p -e "CREATE DATABASE gsb;"
+mysql -u root -p gsb < database/gsb.sql
 ```
 
 ### 6️⃣ Lancer le serveur
