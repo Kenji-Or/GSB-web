@@ -153,6 +153,9 @@ class UserController
 
                 // Seul un utilisateur avec role_id = 1 peut modifier le role_id
                 if ($current_user_role_id === 1) {
+                    if (empty($role_id)){
+                        $role_id = $_SESSION['role'] ?? null;
+                    }
                     $fields[] = "role_id = :role_id";
                     $params[':role_id'] = $role_id;
                 }

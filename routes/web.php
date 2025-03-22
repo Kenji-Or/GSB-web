@@ -68,11 +68,10 @@ $routes = [
             $userController->updateUser($userId);
             if ($_SESSION['role'] === 'admin') {
                 header('Location: index.php?action=GestionAcces');
-                exit();
             } else {
                 header('Location: index.php?action=home');
-                exit();
             }
+            exit();
         } else {
             http_response_code(405);
             echo "Méthode non autorisée.";
