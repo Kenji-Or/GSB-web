@@ -21,7 +21,7 @@ Elle permet aux employés d’accéder à des documents, d’échanger via un fo
 ### 1️⃣ Prérequis  
 Avant d’installer le projet, assure-toi d’avoir :  
 - **PHP 8+**, **MySQL** et **Apache/Nginx**  
-- **Composer** et **Node.js (avec npm)**  
+- **Composer**  
 - **Git** (pour cloner le repo)  
 
 ### 2️⃣ Clonage du projet  
